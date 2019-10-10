@@ -43,7 +43,9 @@
 #define NV_ENC_PARAMS_RC_2_PASS_QUALITY        5
 #define NV_ENC_PARAMS_RC_2_PASS_FRAMESIZE_CAP  6
 #define NV_ENC_PARAMS_RC_2_PASS_VBR            7
-
+#define NV_ENC_PARAMS_RC_CBR_LD_HQ             8
+#define NV_ENC_PARAMS_RC_CBR_HQ                9
+#define NV_ENC_PARAMS_RC_VBR_HQ               10
 #define AV_DICT_SET_CQ(d, v, a) \
     AV_DICT_SET_INT((d), "cq", (v) ? (v) : (a), AV_DICT_DONT_OVERWRITE)
 
@@ -85,22 +87,25 @@ tvh_codec_profile_nvenc_open(tvh_codec_profile_nvenc_t *self,
         {"ll_2pass_quality",  NV_ENC_PARAMS_RC_2_PASS_QUALITY},
         {"ll_2pass_size",     NV_ENC_PARAMS_RC_2_PASS_FRAMESIZE_CAP},
         {"vbr_2pass",         NV_ENC_PARAMS_RC_2_PASS_VBR},
+        {"cbr_ld_hq",         NV_ENC_PARAMS_RC_CBR_LD_HQ},
+        {"cbr_hq",         NV_ENC_PARAMS_RC_CBR_HQ},
+        {"vbr_hq",         NV_ENC_PARAMS_RC_VBR_HQ},
     };
     const char *s;
 
     AV_DICT_SET_INT(opts, "gpu", MINMAX(self->devicenum, 0, 15), 0);
     if (self->preset != PRESET_DEFAULT &&
         (s = val2str(self->profile, presettab)) != NULL) {
-        AV_DICT_SET(opts, "preset", s, 0);
+        AV_DICT_SET(opts, "preset:v", s, 0);
     }
     if (self->rc != NV_ENC_PARAMS_RC_AUTO &&
         (s = val2str(self->rc, rctab)) != NULL) {
-        AV_DICT_SET(opts, "rc", s, 0);
+        AV_DICT_SET(opts, "rc:v", s, 0);
     }
     if (self->bit_rate) {
         AV_DICT_SET_BIT_RATE(opts, self->bit_rate);
     }
-    AV_DICT_SET_INT(opts, "quality", self->quality, 0);
+    AV_DICT_SET_INT(opts, "quality:v", self->quality, 0);
     return 0;
 }
 
@@ -143,6 +148,9 @@ codec_profile_nvenc_class_rc_list(void *obj, const char *lang)
         {N_("VBR multi-pass LL quality mode"), 	  NV_ENC_PARAMS_RC_2_PASS_QUALITY},
         {N_("VBR multi-pass LL frame size mode"), NV_ENC_PARAMS_RC_2_PASS_FRAMESIZE_CAP},
         {N_("VBR multi-pass mode"), 		  NV_ENC_PARAMS_RC_2_PASS_VBR},
+        {N_("CBR low delay HQ mode"), 		  NV_ENC_PARAMS_RC_CBR_LD_HQ},
+        {N_("CBR HQ mode"), 		  NV_ENC_PARAMS_RC_CBR_HQ},
+        {N_("VBR HQ mode"), 		  NV_ENC_PARAMS_RC_CBR_HQ},
     };
     return strtab2htsmsg(tab, 1, lang);
 }
@@ -250,7 +258,7 @@ tvh_codec_profile_nvenc_h264_open(tvh_codec_profile_nvenc_t *self,
 
     if (self->nvenc_profile != FF_PROFILE_UNKNOWN &&
         (s = val2str(self->nvenc_profile, profiletab)) != NULL)
-      AV_DICT_SET(opts, "profile", s, 0);
+      AV_DICT_SET(opts, "profile:v", s, 0);
     return 0;
 }
 
@@ -281,6 +289,7 @@ TVHVideoCodec tvh_codec_nvenc_h264 = {
 static const AVProfile nvenc_hevc_profiles[] = {
     { FF_PROFILE_HEVC_MAIN,    "Main" },
     { FF_PROFILE_HEVC_MAIN_10, "Main 10" },
+    { FF_PROFILE_HEVC_REXT, "Rext" },
     { FF_PROFILE_UNKNOWN },
 };
 
@@ -291,13 +300,14 @@ tvh_codec_profile_nvenc_hevc_open(tvh_codec_profile_nvenc_t *self,
     static const struct strtab profiletab[] = {
         {"main",        FF_PROFILE_HEVC_MAIN},
         {"main10",      FF_PROFILE_HEVC_MAIN_10,},
+                {"rext",      FF_PROFILE_HEVC_REXT,},
     };
     const char *s;
 
     if (self->nvenc_profile != FF_PROFILE_UNKNOWN &&
         (s = val2str(self->nvenc_profile, profiletab)) != NULL)
-      AV_DICT_SET(opts, "profile", s, 0);
-    AV_DICT_SET_INT(opts, "bf", 0, 0);
+      AV_DICT_SET(opts, "profile:v", s, 0);
+    AV_DICT_SET_INT(opts, "bf:v", 0, 0);
     return 0;
 }
 
