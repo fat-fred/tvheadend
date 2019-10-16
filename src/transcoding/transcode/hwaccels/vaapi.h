@@ -36,19 +36,19 @@ void
 vaapi_decode_close_context(AVCodecContext *avctx);
 
 int
-vaapi_get_scale_filter(AVCodecContext *iavctx, AVCodecContext *oavctx, char *filter, size_t filter_len);
+vaapi_get_scale_filter(AVCodecParameters *ipar, AVCodecParameters *opar, char *filter, size_t filter_len);
 
 int
-vaapi_get_deint_filter(AVCodecContext *avctx, char *filter, size_t filter_len);
+vaapi_get_deint_filter(AVCodecParameters *par, char *filter, size_t filter_len);
 
 
 /* encoding ================================================================= */
 
 int
-vaapi_encode_setup_context(AVCodecContext *avctx);
+vaapi_encode_setup_context(AVCodecParameters *par);
 
 void
-vaapi_encode_close_context(AVCodecContext *avctx);
+vaapi_encode_close_context(AVCodecParameters *par);
 
 
 /* module =================================================================== */

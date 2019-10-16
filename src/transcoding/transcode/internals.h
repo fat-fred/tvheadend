@@ -144,8 +144,8 @@ struct tvh_context {
     TVHStream *stream;
     TVHCodecProfile *profile;
     TVHContextType *type;
-    AVCodecContext *iavctx;
-    AVCodecContext *oavctx;
+    AVCodecParameters *ipar;
+    AVCodecParameters *opar;
     AVFrame *iavframe;
     AVFrame *oavframe;
     pktbuf_t *input_gh;

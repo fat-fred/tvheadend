@@ -42,7 +42,7 @@ libav_log_callback(void *ptr, int level, const char *fmt, va_list vl)
                  strstr(fmt, ", pts=-") == 0) {
         level = AV_LOG_TRACE;
       }
-    } else if (strcmp(class_name, "AVCodecContext") == 0) {
+    } else if (strcmp(class_name, "AVCodecParameters") == 0) {
       if (strcmp(fmt, "forced frame type (%d) at %d was changed to frame type (%d)\n") == 0) {
         level = AV_LOG_TRACE;
       }
@@ -218,10 +218,10 @@ codec_id2streaming_component_type(enum AVCodecID id)
  *
  */
 int
-libav_is_encoder(AVCodec *codec)
+libav_is_encoder(AVCodec *codecpar)
 {
 #if LIBAVCODEC_VERSION_INT >= ((54<<16)+(7<<8)+0)
-  return av_codec_is_encoder(codec);
+  return av_codec_is_encoder(codecpar);
 #else
   return codecpar->encode || codecpar->encode2;
 #endif

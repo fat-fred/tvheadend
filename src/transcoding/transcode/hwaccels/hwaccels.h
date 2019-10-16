@@ -30,27 +30,27 @@
 /* decoding ================================================================= */
 
 enum AVPixelFormat
-hwaccels_decode_get_format(AVCodecContext *avctx,
+hwaccels_decode_get_format(AVCodecParameters *par,
                            const enum AVPixelFormat *pix_fmts);
 
 void
-hwaccels_decode_close_context(AVCodecContext *avctx);
+hwaccels_decode_close_context(AVCodecParamters *par);
 
 int
-hwaccels_get_scale_filter(AVCodecContext *iavctx, AVCodecContext *oavctx,
+hwaccels_get_scale_filter(AVCodecParameters *ipar, AVCodecParameters *opar,
                           char *filter, size_t filter_len);
 
 int
-hwaccels_get_deint_filter(AVCodecContext *avctx, char *filter, size_t filter_len);
+hwaccels_get_deint_filter(AVCodecParameters *par, char *filter, size_t filter_len);
 
 
 /* encoding ================================================================= */
 
 int
-hwaccels_encode_setup_context(AVCodecContext *avctx);
+hwaccels_encode_setup_context(AVCodecParameters *par);
 
 void
-hwaccels_encode_close_context(AVCodecContext *avctx);
+hwaccels_encode_close_context(AVCodecParameters *par);
 
 
 /* module =================================================================== */

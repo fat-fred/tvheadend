@@ -79,14 +79,14 @@ lav_muxer_add_stream(lav_muxer_t *lm,
 		     const streaming_start_component_t *ssc)
 {
   AVStream *st;
-  AVCodecContext *c;
+  AVCodecParameters *c;
 
   st = avformat_new_stream(lm->lm_oc, NULL);
   if (!st)
     return -1;
 
   st->id = ssc->es_index;
-  c = st->codec;
+  c = st->codecpar;
   c->codec_id = streaming_component_type2codec_id(ssc->es_type);
 
   switch(lm->m_config.m_type) {

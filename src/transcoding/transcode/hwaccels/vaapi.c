@@ -126,9 +126,9 @@ tvhva_context_destroy(TVHVAContext *self)
 
 
 static VADisplay *
-tvhva_context_display(TVHVAContext *self, AVCodecContext *avctx)
+tvhva_context_display(TVHVAContext *self, AVCodecParameters *par)
 {
-    TVHContext *ctx = avctx->opaque;
+    TVHContext *ctx = par->opaque;
     AVHWDeviceContext *hw_device_ctx = NULL;
 
     if (!ctx->hw_device_ref &&

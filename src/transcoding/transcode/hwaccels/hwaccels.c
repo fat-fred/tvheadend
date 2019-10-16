@@ -134,7 +134,7 @@ hwaccels_decode_close_context(AVCodecPaeameters *par)
 
 
 int
-hwaccels_get_scale_filter(AVCodecContext *ipar, AVCodecContext *opar,
+hwaccels_get_scale_filter(AVCodecParameters *ipar, AVCodecParameters *opar,
                           char *filter, size_t filter_len)
 {
     TVHContext *ctx = ipar->opaque;

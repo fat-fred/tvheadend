@@ -185,12 +185,12 @@ _context_wrap(TVHContext *self, AVPacket *avpkt, th_pkt_t *pkt)
 static AVCodecContext *
 tvh_context_alloc_avctx(TVHContext *context, AVCodec *avcodec)
 {
-    AVCodecContext *avctx = NULL;
+    AVCodecParameters *par = NULL;
 
     if ((avctx = avcodec_alloc_context3(avcodec))) {
-        avctx->strict_std_compliance = FF_COMPLIANCE_EXPERIMENTAL;
-        avctx->refcounted_frames = 1;
-        avctx->opaque = context;
+        par->strict_std_compliance = FF_COMPLIANCE_EXPERIMENTAL;
+        par->refcounted_frames = 1;
+        par->opaque = context;
     }
     return avctx;
 }
