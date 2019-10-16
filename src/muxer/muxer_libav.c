@@ -79,7 +79,7 @@ lav_muxer_add_stream(lav_muxer_t *lm,
 		     const streaming_start_component_t *ssc)
 {
   AVStream *st;
-  AVCodecCodec *c;
+  AVCodecContext *c;
 
   st = avformat_new_stream(lm->lm_oc, NULL);
   if (!st)
