@@ -30,10 +30,10 @@
 /* decoding ================================================================= */
 
 int
-vaapi_decode_setup_context(AVCodecContext *avctx);
+vaapi_decode_setup_context(AVCodecParameters *par);
 
 void
-vaapi_decode_close_context(AVCodecContext *avctx);
+vaapi_decode_close_context(AVCodecParameters *par);
 
 int
 vaapi_get_scale_filter(AVCodecParameters *ipar, AVCodecParameters *opar, char *filter, size_t filter_len);

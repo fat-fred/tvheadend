@@ -182,17 +182,17 @@ _context_wrap(TVHContext *self, AVPacket *avpkt, th_pkt_t *pkt)
 
 // creation
 
-static AVCodecContext *
+static AVCodecParameters *
 tvh_context_alloc_avctx(TVHContext *context, AVCodec *avcodec)
 {
     AVCodecParameters *par = NULL;
 
-    if ((avctx = avcodec_alloc_context3(avcodec))) {
+    if ((par = avcodec_alloc_context3(avcodec))) {
         par->strict_std_compliance = FF_COMPLIANCE_EXPERIMENTAL;
         par->refcounted_frames = 1;
         par->opaque = context;
     }
-    return avctx;
+    return par;
 }
 
 
@@ -208,8 +208,8 @@ tvh_context_setup(TVHContext *self, AVCodec *iavcodec, AVCodec *oavcodec)
                        media_type_name ? media_type_name : "<unknown>");
         return -1;
     }
-    if (!(self->iavctx = tvh_context_alloc_avctx(self, iavcodec)) ||
-        !(self->oavctx = tvh_context_alloc_avctx(self, oavcodec)) ||
+    if (!(self->ipar = tvh_context_alloc_avctx(self, iavcodec)) ||
+        !(self->opar = tvh_context_alloc_avctx(self, oavcodec)) ||
         !(self->iavframe = av_frame_alloc()) ||
         !(self->oavframe = av_frame_alloc())) {
         tvh_stream_log(self->stream, LOG_ERR,
