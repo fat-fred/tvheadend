@@ -26,11 +26,11 @@
 
 
 static int
-_video_filters_hw_pix_fmt(enum AVPixelFormat pix_fmt)
+_video_filters_hw_pix_fmt(enum AVPixelFormat format)
 {
     const AVPixFmtDescriptor *desc;
 
-    if ((desc = av_pix_fmt_desc_get(pix_fmt)) &&
+    if ((desc = av_pix_fmt_desc_get(Format)) &&
         (desc->flags & AV_PIX_FMT_FLAG_HWACCEL)) {
         return 1;
     }
@@ -47,9 +47,9 @@ _video_filters_get_filters(TVHContext *self, AVDictionary **opts, char **filters
     char scale[24];
     char hw_scale[64];
     char upload[48];
-    int ihw = _video_filters_hw_pix_fmt(self->iavctx->pix_fmt);
-    int ohw = _video_filters_hw_pix_fmt(self->oavctx->pix_fmt);
-    int filter_scale = (self->iavctx->height != self->oavctx->height);
+    int ihw = _video_filters_hw_pix_fmt(self->iavctx->format);
+    int ohw = _video_filters_hw_pix_fmt(self->oavctx->format);
+    int filter_scale = (self->ipar->height != self->opar->height);
     int filter_deint = 0, filter_download = 0, filter_upload = 0;
 
     if (tvh_context_get_int_opt(opts, "tvh_filter_deint", &filter_deint)) {
@@ -62,7 +62,7 @@ _video_filters_get_filters(TVHContext *self, AVDictionary **opts, char **filters
     memset(hw_deint, 0, sizeof(hw_deint));
 #if ENABLE_HWACCELS
     if (filter_deint &&
-        hwaccels_get_deint_filter(self->iavctx, hw_deint, sizeof(hw_deint))) {
+        hwaccels_get_deint_filter(self->ipar, hw_deint, sizeof(hw_deint))) {
 #else
     if (filter_deint) {
 #endif
@@ -75,12 +75,12 @@ _video_filters_get_filters(TVHContext *self, AVDictionary **opts, char **filters
     memset(hw_scale, 0, sizeof(hw_scale));
 #if ENABLE_HWACCELS
     if (filter_scale &&
-        hwaccels_get_scale_filter(self->iavctx, self->oavctx, hw_scale, sizeof(hw_scale))) {
+        hwaccels_get_scale_filter(self->ipar, self->opar, hw_scale, sizeof(hw_scale))) {
 #else
     if (filter_scale) {
 #endif
         if (str_snprintf(scale, sizeof(scale), "scale=w=-2:h=%d",
-                         self->oavctx->height)) {
+                         self->opar->height)) {
             return -1;
         }
     }
@@ -100,7 +100,7 @@ _video_filters_get_filters(TVHContext *self, AVDictionary **opts, char **filters
     if (filter_upload &&
         str_snprintf(upload, sizeof(upload), "format=pix_fmts=%s|%s,hwupload",
                      av_get_pix_fmt_name(self->oavctx->sw_pix_fmt),
-                     av_get_pix_fmt_name(self->oavctx->pix_fmt))) {
+                     av_get_pix_fmt_name(self->oavctx->format))) {
         return -1;
     }
 
@@ -121,7 +121,7 @@ tvh_video_context_open_decoder(TVHContext *self, AVDictionary **opts)
         return -1;
     }
     if (hwaccel) {
-        self->iavctx->get_format = hwaccels_decode_get_format;
+        self->ipar->get_format = hwaccels_decode_get_format;
     }
     mystrset(&self->hw_accel_device, self->profile->device);
 #endif
@@ -152,34 +152,34 @@ tvh_video_context_open_encoder(TVHContext *self, AVDictionary **opts)
 {
     AVRational ticks_per_frame;
 
-    if (tvh_context_get_int_opt(opts, "pix_fmt", &self->oavctx->pix_fmt) ||
-        tvh_context_get_int_opt(opts, "width", &self->oavctx->width) ||
-        tvh_context_get_int_opt(opts, "height", &self->oavctx->height)) {
+    if (tvh_context_get_int_opt(opts, "pix_fmt", &self->opar->pix_fmt) ||
+        tvh_context_get_int_opt(opts, "width", &self->opar->width) ||
+        tvh_context_get_int_opt(opts, "height", &self->opar->height)) {
         return -1;
     }
 
 #if ENABLE_HWACCELS
-    self->oavctx->coded_width = self->oavctx->width;
-    self->oavctx->coded_height = self->oavctx->height;
+    self->opar->coded_width = self->opar->width;
+    self->opar->coded_height = self->opar->height;
     if (hwaccels_encode_setup_context(self->oavctx)) {
         return -1;
     }
 #endif
 
     // XXX: is this a safe assumption?
-    if (!self->iavctx->framerate.num) {
-        self->iavctx->framerate = av_make_q(30, 1);
+    if (!self->ipar->framerate.num) {
+        self->ipar->framerate = av_make_q(30, 1);
     }
-    self->oavctx->framerate = self->iavctx->framerate;
-    self->oavctx->ticks_per_frame = self->iavctx->ticks_per_frame;
-    ticks_per_frame = av_make_q(self->oavctx->ticks_per_frame, 1);
-    self->oavctx->time_base = av_inv_q(av_mul_q(
-        self->oavctx->framerate, ticks_per_frame));
-    self->oavctx->gop_size = ceil(av_q2d(av_inv_q(av_mul_q(
-        self->oavctx->time_base, ticks_per_frame))));
-    self->oavctx->gop_size *= 3;
+    self->opar->framerate = self->ipar->framerate;
+    self->opar->ticks_per_frame = self->ipar->ticks_per_frame;
+    ticks_per_frame = av_make_q(self->opar->ticks_per_frame, 1);
+    self->opar->time_base = av_inv_q(av_mul_q(
+        self->opar->framerate, ticks_per_frame));
+    self->opar->gop_size = ceil(av_q2d(av_inv_q(av_mul_q(
+        self->opar->time_base, ticks_per_frame))));
+    self->opar->gop_size *= 3;
 
-    self->oavctx->sample_aspect_ratio = self->iavctx->sample_aspect_ratio;
+    self->opar->sample_aspect_ratio = self->iavctx->sample_aspect_ratio;
     return 0;
 }
 
@@ -194,13 +194,13 @@ tvh_video_context_open_filters(TVHContext *self, AVDictionary **opts)
     memset(source_args, 0, sizeof(source_args));
     if (str_snprintf(source_args, sizeof(source_args),
             "video_size=%dx%d:pix_fmt=%s:time_base=%d/%d:pixel_aspect=%d/%d",
-            self->iavctx->width,
-            self->iavctx->height,
-            av_get_pix_fmt_name(self->iavctx->pix_fmt),
-            self->iavctx->time_base.num,
-            self->iavctx->time_base.den,
-            self->iavctx->sample_aspect_ratio.num,
-            self->iavctx->sample_aspect_ratio.den)) {
+            self->ipar->width,
+            self->ipar->height,
+            av_get_pix_fmt_name(self->ipar->format),
+            self->ipar->time_base.num,
+            self->ipar->time_base.den,
+            self->ipar->sample_aspect_ratio.num,
+            self->ipar->sample_aspect_ratio.den)) {
         return -1;
     }
 
@@ -213,8 +213,8 @@ tvh_video_context_open_filters(TVHContext *self, AVDictionary **opts)
         "buffer", source_args,              // source
         strlen(filters) ? filters : "null", // filters
         "buffersink",                       // sink
-        "pix_fmts", &self->oavctx->pix_fmt, // sink option: pix_fmt
-        sizeof(self->oavctx->pix_fmt),
+        "pix_fmts", &self->opar->format, // sink option: pix_fmt
+        sizeof(self->opar->format),
         NULL);                              // _IMPORTANT!_
     str_clear(filters);
     return ret;
@@ -252,11 +252,11 @@ tvh_video_context_encode(TVHContext *self, AVFrame *avframe)
     }
     self->pts = avframe->pts;
     if (avframe->interlaced_frame) {
-        self->oavctx->field_order =
+        self->opar->field_order =
             avframe->top_field_first ? AV_FIELD_TB : AV_FIELD_BT;
     }
     else {
-        self->oavctx->field_order = AV_FIELD_PROGRESSIVE;
+        self->opar->field_order = AV_FIELD_PROGRESSIVE;
     }
     return 0;
 }
@@ -294,8 +294,8 @@ tvh_video_context_wrap(TVHContext *self, AVPacket *avpkt, th_pkt_t *pkt)
             // some codecs do not set pict_type but set key_frame, in this case,
             // we assume that when key_frame == 1 the frame is an I-frame
             // (all the others are assumed to be P-frames)
-            if (!(pict_type = self->oavctx->coded_frame->pict_type)) {
-                if (self->oavctx->coded_frame->key_frame) {
+            if (!(pict_type = self->opar->coded_frame->pict_type)) {
+                if (self->opar->coded_frame->key_frame) {
                     pict_type = AV_PICTURE_TYPE_I;
                 }
                 else {
