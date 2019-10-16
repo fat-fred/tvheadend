@@ -116,7 +116,7 @@ static void
 tvh_codec_video_init(TVHVideoCodec *self, AVCodec *codec)
 {
     if (!self->pix_fmts) {
-        self->pix_fmts = codec->pix_fmts;
+        self->pix_fmts = codecpar->format;
     }
 }
 
@@ -128,15 +128,15 @@ tvh_codec_audio_init(TVHAudioCodec *self, AVCodec *codec)
     };
 
     if (!self->sample_fmts) {
-        self->sample_fmts = codec->sample_fmts;
+        self->sample_fmts = codecpar->sample_fmts;
     }
     if (!self->sample_rates) {
-        self->sample_rates = codec->supported_samplerates;
+        self->sample_rates = codecpar->supported_samplerates;
         if (!self->sample_rates)
             self->sample_rates = default_sample_rates;
     }
     if (!self->channel_layouts) {
-        self->channel_layouts = codec->channel_layouts;
+        self->channel_layouts = codecpar->channel_layouts;
     }
 }
 
@@ -145,7 +145,7 @@ static void
 tvh_codec_init(TVHCodec *self, AVCodec *codec)
 {
     if (!self->profiles) {
-        self->profiles = codec->profiles;
+        self->profiles = codecpar->profiles;
     }
     switch (codec->type) {
         case AVMEDIA_TYPE_VIDEO:

@@ -144,15 +144,15 @@ tvhva_context_display(TVHVAContext *self, AVCodecContext *avctx)
 
 
 static VAProfile
-tvhva_context_profile(TVHVAContext *self, AVCodecContext *avctx)
+tvhva_context_profile(TVHVAContext *self, AVCodecParameters *par)
 {
     VAStatus va_res = VA_STATUS_ERROR_UNKNOWN;
     VAProfile profile = VAProfileNone, check = VAProfileNone, *profiles = NULL;
     int i, j, profiles_max, profiles_len;
 
-    switch (avctx->codec->id) {
+    switch (par->codecpar->id) {
         case AV_CODEC_ID_MPEG2VIDEO:
-            switch (avctx->profile) {
+            switch (par->profile) {
                 case FF_PROFILE_UNKNOWN:
                 case FF_PROFILE_MPEG2_MAIN:
                     check = VAProfileMPEG2Main;
@@ -165,7 +165,7 @@ tvhva_context_profile(TVHVAContext *self, AVCodecContext *avctx)
             }
             break;
         case AV_CODEC_ID_H264:
-            switch (avctx->profile) {
+            switch (par->profile) {
                 case FF_PROFILE_UNKNOWN:
                 case FF_PROFILE_H264_HIGH:
                     check = VAProfileH264High;
@@ -184,7 +184,7 @@ tvhva_context_profile(TVHVAContext *self, AVCodecContext *avctx)
             }
             break;
         case AV_CODEC_ID_HEVC:
-            switch (avctx->profile) {
+            switch (par->profile) {
                 case FF_PROFILE_UNKNOWN:
                 case FF_PROFILE_HEVC_MAIN:
                     check = VAProfileHEVCMain;
@@ -197,7 +197,7 @@ tvhva_context_profile(TVHVAContext *self, AVCodecContext *avctx)
             }
             break;
         case AV_CODEC_ID_VP8:
-            switch (avctx->profile) {
+            switch (par->profile) {
                 case FF_PROFILE_UNKNOWN:
                     check = VAProfileVP8Version0_3;
                     break;
@@ -206,7 +206,7 @@ tvhva_context_profile(TVHVAContext *self, AVCodecContext *avctx)
             }
             break;
         case AV_CODEC_ID_VP9:
-            switch (avctx->profile) {
+            switch (par->profile) {
                 case FF_PROFILE_UNKNOWN:
                 case FF_PROFILE_VP9_0:
                     check = VAProfileVP9Profile0;
@@ -398,7 +398,7 @@ end:
 
 
 static int
-tvhva_context_setup(TVHVAContext *self, AVCodecContext *avctx)
+tvhva_context_setup(TVHVAContext *self, AVCodecParameters *par)
 {
     VAProfile profile = VAProfileNone;
     unsigned int format = 0;
@@ -406,18 +406,18 @@ tvhva_context_setup(TVHVAContext *self, AVCodecContext *avctx)
     AVHWFramesContext *hw_frames_ctx = NULL;
     AVVAAPIFramesContext *va_frames = NULL;
 
-    if (!(self->display = tvhva_context_display(self, avctx))) {
+    if (!(self->display = tvhva_context_display(self, par))) {
         return -1;
     }
 
     libav_vaapi_init_context(self->display);
 
-    if ((profile = tvhva_context_profile(self, avctx)) == VAProfileNone ||
+    if ((profile = tvhva_context_profile(self, par)) == VAProfileNone ||
         tvhva_context_check_profile(self, profile)) {
         tvherror(LS_VAAPI, "%s: unsupported codec: %s and/or profile: %s",
                  self->logpref,
-                 avctx->codec->name,
-                 av_get_profile_name(avctx->codec, avctx->profile));
+                 par->codecpar->name,
+                 av_get_profile_name(par->codecpar, par->profile));
         return -1;
     }
     if (!(format = tvhva_get_format(self->io_format))) {
@@ -478,10 +478,10 @@ tvhva_context_setup(TVHVAContext *self, AVCodecContext *avctx)
 
 static TVHVAContext *
 tvhva_context_create(const char *logpref,
-                     AVCodecContext *avctx, VAEntrypoint entrypoint)
+                     AVCodecParameters *par, VAEntrypoint entrypoint)
 {
     TVHVAContext *self = NULL;
-    enum AVPixelFormat pix_fmt;
+    enum AVPixelFormat format;
 
     if (!(self = calloc(1, sizeof(TVHVAContext)))) {
         tvherror(LS_VAAPI, "%s: failed to allocate vaapi context", logpref);
@@ -492,27 +492,27 @@ tvhva_context_create(const char *logpref,
     self->config_id = VA_INVALID_ID;
     self->context_id = VA_INVALID_ID;
     self->entrypoint = entrypoint;
-    pix_fmt = self->entrypoint == VAEntrypointVLD ?
-                        avctx->sw_pix_fmt : avctx->pix_fmt;
-    if (pix_fmt == AV_PIX_FMT_YUV420P ||
-        pix_fmt == AV_PIX_FMT_VAAPI) {
+    format = self->entrypoint == VAEntrypointVLD ?
+                        par->sw_pix_fmt : par->format;
+    if (format == AV_PIX_FMT_YUV420P ||
+        format == AV_PIX_FMT_VAAPI) {
         self->io_format = AV_PIX_FMT_NV12;
     }
     else {
-        self->io_format = pix_fmt;
+        self->io_format = format;
     }
     if (self->io_format == AV_PIX_FMT_NONE) {
         tvherror(LS_VAAPI, "%s: failed to get pix_fmt for vaapi context "
                            "(sw_pix_fmt: %s, pix_fmt: %s)",
                            logpref,
-                           av_get_pix_fmt_name(avctx->sw_pix_fmt),
-                           av_get_pix_fmt_name(avctx->pix_fmt));
+                           av_get_pix_fmt_name(par->sw_pix_fmt),
+                           av_get_pix_fmt_name(par->format));
         free(self);
         return NULL;
     }
     self->sw_format = AV_PIX_FMT_NONE;
-    self->width = avctx->coded_width;
-    self->height = avctx->coded_height;
+    self->width = par->coded_width;
+    self->height = par->coded_height;
     self->hw_device_ref = NULL;
     self->hw_frames_ref = NULL;
     if (tvhva_context_setup(self, avctx)) {
@@ -526,52 +526,52 @@ tvhva_context_create(const char *logpref,
 /* decoding ================================================================= */
 
 static int
-vaapi_get_buffer2(AVCodecContext *avctx, AVFrame *avframe, int flags)
+vaapi_get_buffer2(AVCodecParameters *par, AVFrame *avframe, int flags)
 {
-    if (!(avctx->codec->capabilities & AV_CODEC_CAP_DR1)) {
-        return avcodec_default_get_buffer2(avctx, avframe, flags);
+    if (!(par->codecpar->capabilities & AV_CODEC_CAP_DR1)) {
+        return avcodec_default_get_buffer2(par, avframe, flags);
     }
-    return av_hwframe_get_buffer(avctx->hw_frames_ctx, avframe, 0);
+    return av_hwframe_get_buffer(par->hw_frames_ctx, avframe, 0);
 }
 
 
 int
-vaapi_decode_setup_context(AVCodecContext *avctx)
+vaapi_decode_setup_context(AVCodecParameters *par)
 {
-    TVHContext *ctx = avctx->opaque;
+    TVHContext *ctx = par->opaque;
 
     if (!(ctx->hw_accel_ictx =
-          tvhva_context_create("decode", avctx, VAEntrypointVLD))) {
+          tvhva_context_create("decode", par, VAEntrypointVLD))) {
         return -1;
     }
 
-    avctx->get_buffer2 = vaapi_get_buffer2;
-    avctx->thread_safe_callbacks = 0;
+    par->get_buffer2 = vaapi_get_buffer2;
+    par->thread_safe_callbacks = 0;
 
     return 0;
 }
 
 
 void
-vaapi_decode_close_context(AVCodecContext *avctx)
+vaapi_decode_close_context(AVCodecParameters *par)
 {
-    TVHContext *ctx = avctx->opaque;
+    TVHContext *ctx = par->opaque;
 
     tvhva_context_destroy(ctx->hw_accel_ictx);
 }
 
 
 int
-vaapi_get_scale_filter(AVCodecContext *iavctx, AVCodecContext *oavctx,
+vaapi_get_scale_filter(AVCodecParameters *ipar, AVCodecParameters *opar,
                        char *filter, size_t filter_len)
 {
-    snprintf(filter, filter_len, "scale_vaapi=w=%d:h=%d", oavctx->width, oavctx->height);
+    snprintf(filter, filter_len, "scale_vaapi=w=%d:h=%d", opar->width, opar->height);
     return 0;
 }
 
 
 int
-vaapi_get_deint_filter(AVCodecContext *avctx, char *filter, size_t filter_len)
+vaapi_get_deint_filter(AVCodecParameters *par, char *filter, size_t filter_len)
 {
     snprintf(filter, filter_len, "deinterlace_vaapi");
     return 0;
@@ -580,9 +580,9 @@ vaapi_get_deint_filter(AVCodecContext *avctx, char *filter, size_t filter_len)
 /* encoding ================================================================= */
 
 int
-vaapi_encode_setup_context(AVCodecContext *avctx)
+vaapi_encode_setup_context(AVCodecParameters *par)
 {
-    TVHContext *ctx = avctx->opaque;
+    TVHContext *ctx = par->opaque;
     TVHVAContext *hwaccel_context = NULL;
 
     if (!(hwaccel_context =
@@ -599,9 +599,9 @@ vaapi_encode_setup_context(AVCodecContext *avctx)
 
 
 void
-vaapi_encode_close_context(AVCodecContext *avctx)
+vaapi_encode_close_context(AVCodecParameters *par)
 {
-    TVHContext *ctx = avctx->opaque;
+    TVHContext *ctx = par->opaque;
     av_buffer_unref(&ctx->hw_device_octx);
     ctx->hw_device_octx = NULL;
 }

@@ -225,19 +225,19 @@ tvh_context_setup(TVHContext *self, AVCodec *iavcodec, AVCodec *oavcodec)
 static int
 tvh_context_open(TVHContext *self, TVHOpenPhase phase)
 {
-    AVCodecContext *avctx = NULL;
+    AVCodecParameters *par = NULL;
     TVHContextHelper *helper = NULL;
     AVDictionary *opts = NULL;
     int ret = 0;
 
     switch (phase) {
         case OPEN_DECODER:
-            avctx = self->iavctx;
-            helper = tvh_decoder_helper_find(avctx->codec);
+            par = self->iavctx;
+            helper = tvh_decoder_helper_find(par->codecpar);
             break;
         case OPEN_ENCODER:
             avctx = self->oavctx;
-            helper = self->helper = tvh_encoder_helper_find(avctx->codec);
+            helper = self->helper = tvh_encoder_helper_find(par->codecpar);
             ret = tvh_codec_profile_open(self->profile, &opts);
             break;
         default:

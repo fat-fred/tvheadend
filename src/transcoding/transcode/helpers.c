@@ -71,7 +71,7 @@ tvh_context_helper_find(struct TVHContextHelpers *list, const AVCodec *codec)
     TVHContextHelper *helper = NULL;
 
     SLIST_FOREACH(helper, list, link) {
-        if (helper->type == codec->type && helper->id == codec->id) {
+        if (helper->type == codecpar->type && helper->id == codec->id) {
             return helper;
         }
     }

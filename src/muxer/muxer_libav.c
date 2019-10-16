@@ -464,7 +464,7 @@ lav_muxer_write_pkt(muxer_t *m, streaming_message_type_t smt, void *data)
 
     tofree = NULL;
     av_init_packet(&packet);
-    codec_id = st->codec->codec_id;
+    codec_id = st->codecpar->codec_id;
 
     if((lm->lm_h264_filter && codec_id == AV_CODEC_ID_H264) ||
        (lm->lm_hevc_filter && codec_id == AV_CODEC_ID_HEVC)) {
@@ -472,7 +472,7 @@ lav_muxer_write_pkt(muxer_t *m, streaming_message_type_t smt, void *data)
       pkt_ref_dec(opkt);
       if(av_bitstream_filter_filter(st->codec->codec_id == AV_CODEC_ID_H264 ?
                                       lm->lm_h264_filter : lm->lm_hevc_filter,
-				    st->codec, 
+				    st->codecpar, 
 				    NULL, 
 				    &packet.data, 
 				    &packet.size, 

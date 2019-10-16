@@ -32,23 +32,23 @@
 #if LIBAVCODEC_VERSION_MAJOR < 58
 /* lifted from libavcodec/utils.c */
 static AVHWAccel *
-find_hwaccel(enum AVCodecID codec_id, enum AVPixelFormat pix_fmt)
+find_hwaccel(enum AVCodecID codec_id, enum AVPixelFormat format)
 {
     AVHWAccel *hwaccel = NULL;
     while ((hwaccel = av_hwaccel_next(hwaccel))) {
-        if (hwaccel->id == codec_id && hwaccel->pix_fmt == pix_fmt) {
+        if (hwaccel->id == codec_id && hwaccel->format == format) {
             return hwaccel;
         }
     }
     return NULL;
 }
-static inline int check_pix_fmt(AVCodecContext *avctx, enum AVPixelFormat pix_fmt)
+static inline int check_pix_fmt(AVCodecParameters *par, enum AVPixelFormat fprmat)
 {
-    return find_hwaccel(avctx->codec_id, pix_fmt) == NULL;
+    return find_hwaccel(par->codec_id, format) == NULL;
 }
 #else
 static const AVCodecHWConfig *
-find_hwconfig(const AVCodec *codec, enum AVPixelFormat pix_fmt)
+find_hwconfig(const AVCodec *codec, enum AVPixelFormat format)
 {
     const AVCodecHWConfig *hwcfg = NULL;
     int i;
@@ -57,32 +57,32 @@ find_hwconfig(const AVCodec *codec, enum AVPixelFormat pix_fmt)
         hwcfg = avcodec_get_hw_config(codec, i);
         if (!hwcfg)
             break;
-        if (hwcfg->pix_fmt == pix_fmt)
+        if (hwcfg->format == format)
             return hwcfg;
     }
     return NULL;
 }
-static inline int check_pix_fmt(AVCodecContext *avctx, enum AVPixelFormat pix_fmt)
+static inline int check_pix_fmt(AVCodecParameters *par, enum AVPixelFormat format)
 {
-    return find_hwconfig(avctx->codec, pix_fmt) == NULL;
+    return find_hwconfig(par->codecpar, format) == NULL;
 }
 #endif
 
 static int
-hwaccels_decode_setup_context(AVCodecContext *avctx,
-                              const enum AVPixelFormat pix_fmt)
+hwaccels_decode_setup_context(AVCodecParameters *par,
+                              const enum AVPixelFormat format)
 {
     const AVPixFmtDescriptor *desc;
 
-    if (check_pix_fmt(avctx, pix_fmt)) {
-        desc = av_pix_fmt_desc_get(pix_fmt);
+    if (check_pix_fmt(par, format)) {
+        desc = av_pix_fmt_desc_get(format);
         tvherror(LS_TRANSCODE, "no HWAccel for the pixel format '%s'", desc ? desc->name : "<unk>");
         return AVERROR(ENOENT);
     }
-    switch (pix_fmt) {
+    switch (format) {
 #if ENABLE_VAAPI
         case AV_PIX_FMT_VAAPI:
-            return vaapi_decode_setup_context(avctx);
+            return vaapi_decode_setup_context(par);
 #endif
         default:
             break;
@@ -92,37 +92,37 @@ hwaccels_decode_setup_context(AVCodecContext *avctx,
 
 
 enum AVPixelFormat
-hwaccels_decode_get_format(AVCodecContext *avctx,
-                           const enum AVPixelFormat *pix_fmts)
+hwaccels_decode_get_format(AVCodecParameters *par,
+                           const enum AVPixelFormat *pix_fmt)
 {
-    enum AVPixelFormat pix_fmt = AV_PIX_FMT_NONE;
+    enum AVPixelFormat format = AV_PIX_FMT_NONE;
     const AVPixFmtDescriptor *desc;
     int i;
 
     for (i = 0; pix_fmts[i] != AV_PIX_FMT_NONE; i++) {
-        pix_fmt = pix_fmts[i];
-        if ((desc = av_pix_fmt_desc_get(pix_fmt))) {
-            tvhtrace(LS_TRANSCODE, "hwaccels: [%s] trying pix_fmt: %s", avctx->codec->name, desc->name);
+        format = pix_fmts[i];
+        if ((desc = av_pix_fmt_desc_get(format))) {
+            tvhtrace(LS_TRANSCODE, "hwaccels: [%s] trying format: %s", par->codecpar->name, desc->name);
             if ((desc->flags & AV_PIX_FMT_FLAG_HWACCEL) &&
-                !hwaccels_decode_setup_context(avctx, pix_fmt)) {
+                !hwaccels_decode_setup_context(par, format)) {
                 break;
             }
         }
     }
-    return pix_fmt;
+    return format;
 }
 
 
 void
-hwaccels_decode_close_context(AVCodecContext *avctx)
+hwaccels_decode_close_context(AVCodecPaeameters *par)
 {
-    TVHContext *ctx = avctx->opaque;
+    TVHContext *ctx = par->opaque;
 
     if (ctx->hw_accel_ictx) {
-        switch (avctx->pix_fmt) {
+        switch (par->format) {
 #if ENABLE_VAAPI
             case AV_PIX_FMT_VAAPI:
-                vaapi_decode_close_context(avctx);
+                vaapi_decode_close_context(par);
                 break;
 #endif
             default:
@@ -134,16 +134,16 @@ hwaccels_decode_close_context(AVCodecContext *avctx)
 
 
 int
-hwaccels_get_scale_filter(AVCodecContext *iavctx, AVCodecContext *oavctx,
+hwaccels_get_scale_filter(AVCodecContext *ipar, AVCodecContext *opar,
                           char *filter, size_t filter_len)
 {
-    TVHContext *ctx = iavctx->opaque;
+    TVHContext *ctx = ipar->opaque;
 
     if (ctx->hw_accel_ictx) {
-        switch (iavctx->pix_fmt) {
+        switch (ipar->format) {
 #if ENABLE_VAAPI
             case AV_PIX_FMT_VAAPI:
-                return vaapi_get_scale_filter(iavctx, oavctx, filter, filter_len);
+                return vaapi_get_scale_filter(ipar, opar, filter, filter_len);
 #endif
             default:
                 break;
@@ -155,15 +155,15 @@ hwaccels_get_scale_filter(AVCodecContext *iavctx, AVCodecContext *oavctx,
 
 
 int
-hwaccels_get_deint_filter(AVCodecContext *avctx, char *filter, size_t filter_len)
+hwaccels_get_deint_filter(AVCodecParameters *par, char *filter, size_t filter_len)
 {
-    TVHContext *ctx = avctx->opaque;
+    TVHContext *ctx = par->opaque;
 
     if (ctx->hw_accel_ictx) {
-        switch (avctx->pix_fmt) {
+        switch (par->format) {
 #if ENABLE_VAAPI
             case AV_PIX_FMT_VAAPI:
-                return vaapi_get_deint_filter(avctx, filter, filter_len);
+                return vaapi_get_deint_filter(par, filter, filter_len);
 #endif
             default:
                 break;
@@ -177,12 +177,12 @@ hwaccels_get_deint_filter(AVCodecContext *avctx, char *filter, size_t filter_len
 /* encoding ================================================================= */
 
 int
-hwaccels_encode_setup_context(AVCodecContext *avctx)
+hwaccels_encode_setup_context(AVCodecParameters *par)
 {
-    switch (avctx->pix_fmt) {
+    switch (par->format) {
 #if ENABLE_VAAPI
         case AV_PIX_FMT_VAAPI:
-            return vaapi_encode_setup_context(avctx);
+            return vaapi_encode_setup_context(par);
 #endif
         default:
             break;
@@ -192,12 +192,12 @@ hwaccels_encode_setup_context(AVCodecContext *avctx)
 
 
 void
-hwaccels_encode_close_context(AVCodecContext *avctx)
+hwaccels_encode_close_context(AVCodecParameters *par)
 {
-    switch (avctx->pix_fmt) {
+    switch (par->format) {
 #if ENABLE_VAAPI
         case AV_PIX_FMT_VAAPI:
-            vaapi_encode_close_context(avctx);
+            vaapi_encode_close_context(par);
             break;
 #endif
         default:
