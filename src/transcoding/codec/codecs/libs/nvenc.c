@@ -58,7 +58,6 @@ typedef struct {
     int devicenum;
     int preset;
     int rc;
-    int tag;
     int quality;
 } tvh_codec_profile_nvenc_t;
 
@@ -238,7 +237,8 @@ static const codec_profile_class_t codec_profile_nvenc_class = {
                 .group    = 3,
                 .desc     = N_("Override the tag of the Video."),
                 .opts     = PO_EXPERT,
-                .off      = offsetof(tvh_codec_profile_nvenc_t, tag),
+                .get_opts = codec_profile_class_get_opts,
+                .off      = offsetof(TVHCodecProfile, tag),
             },
             {}
         }
