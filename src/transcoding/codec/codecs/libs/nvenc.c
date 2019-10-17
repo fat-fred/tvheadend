@@ -106,7 +106,7 @@ tvh_codec_profile_nvenc_open(tvh_codec_profile_nvenc_t *self,
         AV_DICT_SET_BIT_RATE(opts, self->bit_rate);
     }
     if (self->tag) {
-        AV_DICT_SET(opts, "tag:v", s, 0);
+        AV_DICT_SET(opts, "tag:v", self->tag, 0);
     }
     AV_DICT_SET_INT(opts, "quality:v", self->quality, 0);
     return 0;
