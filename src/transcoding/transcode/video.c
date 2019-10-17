@@ -30,7 +30,7 @@ _video_filters_hw_pix_fmt(enum AVPixelFormat format)
 {
     const AVPixFmtDescriptor *desc;
 
-    if ((desc = av_pix_fmt_desc_get(Format)) &&
+    if ((desc = av_pix_fmt_desc_get(format)) &&
         (desc->flags & AV_PIX_FMT_FLAG_HWACCEL)) {
         return 1;
     }
@@ -47,8 +47,8 @@ _video_filters_get_filters(TVHContext *self, AVDictionary **opts, char **filters
     char scale[24];
     char hw_scale[64];
     char upload[48];
-    int ihw = _video_filters_hw_pix_fmt(self->iavctx->format);
-    int ohw = _video_filters_hw_pix_fmt(self->oavctx->format);
+    int ihw = _video_filters_hw_pix_fmt(self->ipar->format);
+    int ohw = _video_filters_hw_pix_fmt(self->opar->format);
     int filter_scale = (self->ipar->height != self->opar->height);
     int filter_deint = 0, filter_download = 0, filter_upload = 0;
 
@@ -92,15 +92,15 @@ _video_filters_get_filters(TVHContext *self, AVDictionary **opts, char **filters
     memset(download, 0, sizeof(download));
     if (filter_download &&
         str_snprintf(download, sizeof(download), "hwdownload,format=pix_fmts=%s",
-                     av_get_pix_fmt_name(self->iavctx->sw_pix_fmt))) {
+                     av_get_pix_fmt_name(self->ipar->sw_pix_fmt))) {
         return -1;
     }
 
     memset(upload, 0, sizeof(upload));
     if (filter_upload &&
         str_snprintf(upload, sizeof(upload), "format=pix_fmts=%s|%s,hwupload",
-                     av_get_pix_fmt_name(self->oavctx->sw_pix_fmt),
-                     av_get_pix_fmt_name(self->oavctx->format))) {
+                     av_get_pix_fmt_name(self->opar->sw_pix_fmt),
+                     av_get_pix_fmt_name(self->opar->format))) {
         return -1;
     }
 
@@ -333,8 +333,8 @@ static void
 tvh_video_context_close(TVHContext *self)
 {
 #if ENABLE_HWACCELS
-    hwaccels_encode_close_context(self->oavctx);
-    hwaccels_decode_close_context(self->iavctx);
+    hwaccels_encode_close_context(self->opar);
+    hwaccels_decode_close_context(self->ipar);
 #endif
 }
 
