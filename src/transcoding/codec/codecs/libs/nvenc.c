@@ -108,7 +108,7 @@ tvh_codec_profile_nvenc_open(tvh_codec_profile_nvenc_t *self,
     if (self->tag) {
         AV_DICT_SET(opts, "tag:v", self->tag, 0);
     }
-    AV_DICT_SET_INT(opts, "quality:v", self->quality, 0);
+    AV_DICT_SET_TAG(opts, "quality:v", self->quality, 0);
     return 0;
 }
 
