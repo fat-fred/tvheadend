@@ -152,7 +152,7 @@ tvh_video_context_open_encoder(TVHContext *self, AVDictionary **opts)
 {
     AVRational ticks_per_frame;
 
-    if (tvh_context_get_int_opt(opts, "pix_fmt", &self->opar->pix_fmt) ||
+    if (tvh_context_get_int_opt(opts, "pix_fmt", &self->opar->format) ||
         tvh_context_get_int_opt(opts, "width", &self->opar->width) ||
         tvh_context_get_int_opt(opts, "height", &self->opar->height)) {
         return -1;
