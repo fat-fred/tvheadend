@@ -290,7 +290,7 @@ tvh_video_context_wrap(TVHContext *self, AVPacket *avpkt, th_pkt_t *pkt)
             pict_type = qsdata[4];
         }
 #if FF_API_CODED_FRAME
-        else if (self->oavctx->coded_frame) {
+        else if (self->opar->coded_frame) {
             // some codecs do not set pict_type but set key_frame, in this case,
             // we assume that when key_frame == 1 the frame is an I-frame
             // (all the others are assumed to be P-frames)
