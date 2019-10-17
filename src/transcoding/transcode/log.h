@@ -58,8 +58,8 @@
 #define tvh_context_log(self, level, fmt, ...) \
     do { \
         tvh_stream_log((self)->stream, (level), "[%s => %s]: " fmt, \
-            ((self)->iavctxu) ? (self)->ipar->codecpar->name : "<unknown>", \
-            ((self)->oavctx) ? (self)->opar->codecpar->name : "<unknown>", \
+            ((self)->iavctxu) ? (self)->ipar->codecpar->name : "<ipar>", \
+            ((self)->opar) ? (self)->opar->codecpar->name : "<unknown>", \
             ##__VA_ARGS__); \
     } while (0)
 
