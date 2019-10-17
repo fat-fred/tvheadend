@@ -105,6 +105,9 @@ tvh_codec_profile_nvenc_open(tvh_codec_profile_nvenc_t *self,
     if (self->bit_rate) {
         AV_DICT_SET_BIT_RATE(opts, self->bit_rate);
     }
+    if (self->tag) {
+        AV_DICT_SET(opts, "tag:v", s, 0);
+    }
     AV_DICT_SET_INT(opts, "quality:v", self->quality, 0);
     return 0;
 }
@@ -226,6 +229,15 @@ static const codec_profile_class_t codec_profile_nvenc_class = {
                 .off      = offsetof(tvh_codec_profile_nvenc_t, rc),
                 .list     = codec_profile_nvenc_class_rc_list,
                 .def.i    = NV_ENC_PARAMS_RC_AUTO,
+            },
+            {
+                .type     = PT_INT,
+                .id       = "tag",
+                .name     = N_("Video Tag"),
+                .group    = 3,
+                .desc     = N_("Override the tag of the Video."),
+                .opts     = PO_EXPERT,
+                .off      = offsetof(tvh_codec_profile_nvenc_t, tag),
             },
             {}
         }
