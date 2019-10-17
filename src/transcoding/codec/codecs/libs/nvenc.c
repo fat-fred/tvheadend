@@ -39,15 +39,15 @@
 #define NV_ENC_PARAMS_RC_CONSTQP               1
 #define NV_ENC_PARAMS_RC_VBR                   2
 #define NV_ENC_PARAMS_RC_CBR                   3
-#define NV_ENC_PARAMS_RC_VBR_MINQP             4
-#define NV_ENC_PARAMS_RC_2_PASS_QUALITY        5
-#define NV_ENC_PARAMS_RC_2_PASS_FRAMESIZE_CAP  6
-#define NV_ENC_PARAMS_RC_2_PASS_VBR            7
-#define NV_ENC_PARAMS_RC_CBR_LD_HQ             8
-#define NV_ENC_PARAMS_RC_CBR_HQ                9
-#define NV_ENC_PARAMS_RC_VBR_HQ               10
+//#define NV_ENC_PARAMS_RC_VBR_MINQP             4 DEPRECATED
+//#define NV_ENC_PARAMS_RC_2_PASS_QUALITY        5 DEPRECATED
+//#define NV_ENC_PARAMS_RC_2_PASS_FRAMESIZE_CAP  6 DEPRECATED
+//#define NV_ENC_PARAMS_RC_2_PASS_VBR            7 DEPRECATED
+#define NV_ENC_PARAMS_RC_CBR_LD_HQ             4
+#define NV_ENC_PARAMS_RC_CBR_HQ                5
+#define NV_ENC_PARAMS_RC_VBR_HQ               6
 #define AV_DICT_SET_CQ(d, v, a) \
-    AV_DICT_SET_INT((d), "cq", (v) ? (v) : (a), AV_DICT_DONT_OVERWRITE)
+    AV_DICT_SET_INT((d), "cq:v", (v) ? (v) : (a), AV_DICT_DONT_OVERWRITE)
 
 
 /* nvenc ==================================================================== */
@@ -83,10 +83,10 @@ tvh_codec_profile_nvenc_open(tvh_codec_profile_nvenc_t *self,
         {"constqp",	      NV_ENC_PARAMS_RC_CONSTQP},
         {"vbr",               NV_ENC_PARAMS_RC_VBR},
         {"cbr",               NV_ENC_PARAMS_RC_CBR},
-        {"vbr_minqp",         NV_ENC_PARAMS_RC_VBR_MINQP},
-        {"ll_2pass_quality",  NV_ENC_PARAMS_RC_2_PASS_QUALITY},
-        {"ll_2pass_size",     NV_ENC_PARAMS_RC_2_PASS_FRAMESIZE_CAP},
-        {"vbr_2pass",         NV_ENC_PARAMS_RC_2_PASS_VBR},
+        //{"vbr_minqp",         NV_ENC_PARAMS_RC_VBR_MINQP}, DEPRECATED
+        //{"ll_2pass_quality",  NV_ENC_PARAMS_RC_2_PASS_QUALITY}, DEPRECATED
+        //{"ll_2pass_size",     NV_ENC_PARAMS_RC_2_PASS_FRAMESIZE_CAP}, DEPRECATED
+        //{"vbr_2pass",         NV_ENC_PARAMS_RC_2_PASS_VBR}, DEPRECATED
         {"cbr_ld_hq",         NV_ENC_PARAMS_RC_CBR_LD_HQ},
         {"cbr_hq",         NV_ENC_PARAMS_RC_CBR_HQ},
         {"vbr_hq",         NV_ENC_PARAMS_RC_VBR_HQ},
@@ -144,10 +144,10 @@ codec_profile_nvenc_class_rc_list(void *obj, const char *lang)
         {N_("Constant QP mode"),		  NV_ENC_PARAMS_RC_CONSTQP},
         {N_("VBR mode"),   			  NV_ENC_PARAMS_RC_VBR},
         {N_("CBR mode"), 	  		  NV_ENC_PARAMS_RC_CBR},
-        {N_("VBR mode with MinQP"), 	          NV_ENC_PARAMS_RC_VBR_MINQP},
-        {N_("VBR multi-pass LL quality mode"), 	  NV_ENC_PARAMS_RC_2_PASS_QUALITY},
-        {N_("VBR multi-pass LL frame size mode"), NV_ENC_PARAMS_RC_2_PASS_FRAMESIZE_CAP},
-        {N_("VBR multi-pass mode"), 		  NV_ENC_PARAMS_RC_2_PASS_VBR},
+        //{N_("VBR mode with MinQP"), 	          NV_ENC_PARAMS_RC_VBR_MINQP}, DEPRECATED
+        //{N_("VBR multi-pass LL quality mode"), 	  NV_ENC_PARAMS_RC_2_PASS_QUALITY}, DEPRECATED
+        //{N_("VBR multi-pass LL frame size mode"), NV_ENC_PARAMS_RC_2_PASS_FRAMESIZE_CAP}, DEPRECATED
+        //{N_("VBR multi-pass mode"), 		  NV_ENC_PARAMS_RC_2_PASS_VBR}, DEPRECATED
         {N_("CBR low delay HQ mode"), 		  NV_ENC_PARAMS_RC_CBR_LD_HQ},
         {N_("CBR HQ mode"), 		  NV_ENC_PARAMS_RC_CBR_HQ},
         {N_("VBR HQ mode"), 		  NV_ENC_PARAMS_RC_CBR_HQ},
