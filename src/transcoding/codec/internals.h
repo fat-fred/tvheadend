@@ -106,7 +106,7 @@
     AV_DICT_SET_INT((d), "b", (v) * 1000, AV_DICT_DONT_OVERWRITE)
 
 #define AV_DICT_SET_TAG(d, v) \
-    AV_DICT_SET((d), "Tag:v", (v), AV_DICT_DONT_OVERWRITE)
+    AV_DICT_SET((d), "tag:v", (v), AV_DICT_DONT_OVERWRITE)
 
 #define AV_DICT_SET_GLOBAL_QUALITY(d, v, a) \
     do { \
