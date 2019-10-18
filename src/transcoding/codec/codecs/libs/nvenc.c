@@ -238,7 +238,7 @@ static const codec_profile_class_t codec_profile_nvenc_class = {
                 .desc     = N_("with HWACCEL its better to disable."),
                 .opts     = PO_EXPERT,
                 .get_opts = codec_profile_class_get_opts,
-                .off      = offsetof(TVHCodecProfile, tag),
+                .off      = offsetof(TVHCodecProfile, vsync),
             },
             {
                 .type     = PT_STR,
@@ -248,7 +248,7 @@ static const codec_profile_class_t codec_profile_nvenc_class = {
                 .desc     = N_("Override the tag of the Video."),
                 .opts     = PO_EXPERT,
                 .get_opts = codec_profile_class_get_opts,
-                .off      = offsetof(TVHCodecProfile, tag),
+                .off      = offsetof(tvh_codec_profile_nvenc_t, tag),
             },
             {}
         }
