@@ -96,11 +96,11 @@ tvh_codec_profile_nvenc_open(tvh_codec_profile_nvenc_t *self,
     AV_DICT_SET_INT(opts, "gpu", MINMAX(self->devicenum, 0, 15), 0);
     if (self->preset != PRESET_DEFAULT &&
         (s = val2str(self->profile, presettab)) != NULL) {
-        AV_DICT_SET(opts, "preset:v", s, 0);
+        AV_DICT_SET(opts, "preset", s, 0);
     }
     if (self->rc != NV_ENC_PARAMS_RC_AUTO &&
         (s = val2str(self->rc, rctab)) != NULL) {
-        AV_DICT_SET(opts, "rc:v", s, 0);
+        AV_DICT_SET(opts, "rc", s, 0);
     }
     if (self->bit_rate) {
         AV_DICT_SET_BIT_RATE(opts, self->bit_rate);
@@ -108,7 +108,7 @@ tvh_codec_profile_nvenc_open(tvh_codec_profile_nvenc_t *self,
     if (self->tag) {
         AV_DICT_SET_TAG(opts, self->tag);
     }
-    AV_DICT_SET_INT(opts, "quality:v", self->quality, 0);
+    AV_DICT_SET_INT(opts, "quality", self->quality, 0);
     return 0;
 }
 
@@ -281,7 +281,7 @@ tvh_codec_profile_nvenc_h264_open(tvh_codec_profile_nvenc_t *self,
 
     if (self->nvenc_profile != FF_PROFILE_UNKNOWN &&
         (s = val2str(self->nvenc_profile, profiletab)) != NULL)
-      AV_DICT_SET(opts, "profile:v", s, 0);
+      AV_DICT_SET(opts, "profile", s, 0);
     return 0;
 }
 
@@ -329,7 +329,7 @@ tvh_codec_profile_nvenc_hevc_open(tvh_codec_profile_nvenc_t *self,
 
     if (self->nvenc_profile != FF_PROFILE_UNKNOWN &&
         (s = val2str(self->nvenc_profile, profiletab)) != NULL)
-      AV_DICT_SET(opts, "profile:v", s, 0);
+      AV_DICT_SET(opts, "profile", s, 0);
     AV_DICT_SET_INT(opts, "bf", 0, 0);
     return 0;
 }
