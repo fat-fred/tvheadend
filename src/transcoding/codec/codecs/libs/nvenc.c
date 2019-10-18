@@ -231,7 +231,7 @@ static const codec_profile_class_t codec_profile_nvenc_class = {
                 .def.i    = NV_ENC_PARAMS_RC_AUTO,
             },
             {
-                .type     = PT_CHAR,
+                .type     = PT_STR,
                 .id       = "tag",
                 .name     = N_("Video Tag"),
                 .group    = 3,
