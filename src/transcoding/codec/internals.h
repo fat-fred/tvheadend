@@ -107,6 +107,9 @@
 
 #define AV_DICT_SET_TAG(d, v) \
     AV_DICT_SET((d), "tag:v", (v), AV_DICT_DONT_OVERWRITE)
+    
+#define AV_DICT_SET_VSYNC(d, v) \
+    AV_DICT_SET_INT((d), "v-sync", (v), AV_DICT_DONT_OVERWRITE)
 
 #define AV_DICT_SET_GLOBAL_QUALITY(d, v, a) \
     do { \
@@ -217,6 +220,7 @@ typedef struct tvh_codec_profile_video {
     int hwaccel;
     int pix_fmt;
     int crf;
+    int vsync;
     AVRational size;
 } TVHVideoCodecProfile;
 

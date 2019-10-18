@@ -231,6 +231,16 @@ static const codec_profile_class_t codec_profile_nvenc_class = {
                 .def.i    = NV_ENC_PARAMS_RC_AUTO,
             },
             {
+                .type     = PT_BOOL,
+                .id       = "vsync",
+                .name     = N_("V-Sync"),
+                .group    = 5,
+                .desc     = N_("with HWACCEL its better to disable."),
+                .opts     = PO_EXPERT,
+                .get_opts = codec_profile_class_get_opts,
+                .off      = offsetof(TVHCodecProfile, tag),
+            },
+            {
                 .type     = PT_STR,
                 .id       = "tag",
                 .name     = N_("Video Tag"),
