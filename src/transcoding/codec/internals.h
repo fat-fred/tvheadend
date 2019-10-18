@@ -220,7 +220,7 @@ typedef struct tvh_codec_profile_video {
     int hwaccel;
     int pix_fmt;
     int crf;
-    int vsync;
+    char *tag;
     AVRational size;
 } TVHVideoCodecProfile;
 
