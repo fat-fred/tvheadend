@@ -248,7 +248,7 @@ static const codec_profile_class_t codec_profile_nvenc_class = {
                 .desc     = N_("Override the tag of the Video."),
                 .opts     = PO_EXPERT,
                 .get_opts = codec_profile_class_get_opts,
-                .off      = offsetof(tvh_codec_profile_nvenc_t, tag),
+                .off      = offsetof(TVHCodecProfile, tag),
             },
             {}
         }
