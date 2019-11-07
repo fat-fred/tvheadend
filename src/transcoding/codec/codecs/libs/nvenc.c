@@ -328,7 +328,7 @@ tvh_codec_profile_nvenc_hevc_open(tvh_codec_profile_nvenc_t *self,
     };
     const char *s;
 
-    s = val2str(self->nvenc_profile, profiletab)
+    s = val2str(self->nvenc_profile, profiletab);
     if (self->nvenc_profile != FF_PROFILE_UNKNOWN &&
         s != NULL)
       AV_DICT_SET(opts, "profile", s, 0);
