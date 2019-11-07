@@ -278,9 +278,10 @@ tvh_codec_profile_nvenc_h264_open(tvh_codec_profile_nvenc_t *self,
         {"high444p",    FF_PROFILE_H264_HIGH_444_PREDICTIVE},
     };
     const char *s;
-
+    
+    s = val2str(self->nvenc_profile, profiletab)
     if (self->nvenc_profile != FF_PROFILE_UNKNOWN &&
-        (s = val2str(self->nvenc_profile, profiletab)) != NULL)
+        s != NULL )
       AV_DICT_SET(opts, "profile", s, 0);
     return 0;
 }
@@ -327,8 +328,9 @@ tvh_codec_profile_nvenc_hevc_open(tvh_codec_profile_nvenc_t *self,
     };
     const char *s;
 
+    s = val2str(self->nvenc_profile, profiletab)
     if (self->nvenc_profile != FF_PROFILE_UNKNOWN &&
-        (s = val2str(self->nvenc_profile, profiletab)) != NULL)
+        s != NULL)
       AV_DICT_SET(opts, "profile", s, 0);
     AV_DICT_SET_INT(opts, "bf", 0, 0);
     return 0;
