@@ -331,9 +331,9 @@ tvh_codec_profile_nvenc_hevc_open(tvh_codec_profile_nvenc_t *self,
     s = val2str(self->nvenc_profile, profiletab);
     if (self->nvenc_profile != FF_PROFILE_UNKNOWN &&
         s != NULL)
-      AV_DICT_SET(opts, "profile", s, 0);
+      AV_DICT_SET(opts, "profile:v", s, 0);
     AV_DICT_SET_INT(opts, "bf", 0, 0);
-    AV_DICT_SET(opts, "vtag", "hvc1", 0);
+    AV_DICT_SET(opts, "tag:v", "hvc1", 0);
     return 0;
 }
 
