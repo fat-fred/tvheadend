@@ -89,7 +89,6 @@ struct tvh_codec_profile {
     char *name;
     char *description;
     char *codec_name;
-    char *tag;
     double bit_rate;
     double qscale;
     int vsync;
