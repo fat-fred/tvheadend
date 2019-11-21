@@ -314,6 +314,7 @@ static const AVProfile nvenc_hevc_profiles[] = {
     { FF_PROFILE_HEVC_MAIN,    "Main" },
     { FF_PROFILE_HEVC_MAIN_10, "Main 10" },
     { FF_PROFILE_HEVC_REXT, "Rext" },
+    { FF_PROFILE_HEVC_AUTO, "Automatic" },
     { FF_PROFILE_UNKNOWN },
 };
 
@@ -325,12 +326,13 @@ tvh_codec_profile_nvenc_hevc_open(tvh_codec_profile_nvenc_t *self,
         {"main",        FF_PROFILE_HEVC_MAIN},
         {"main10",      FF_PROFILE_HEVC_MAIN_10,},
                 {"rext",      FF_PROFILE_HEVC_REXT,},
+                {"Auto",      FF_PROFILE_HEVC_AUTO,},
     };
     const char *s;
 
-    s = val2str(self->nvenc_profile, profiletab);
+    s = val2str(self->nvenc_profile, profiletab) -1;
     if (self->nvenc_profile != FF_PROFILE_UNKNOWN &&
-        s != NULL)
+        (s != NULL && s != -1))
       AV_DICT_SET(opts, "profile", s, 0);
     AV_DICT_SET_INT(opts, "bf", 0, 0);
     AV_DICT_SET(opts, "tag", "hvc1", 0);
