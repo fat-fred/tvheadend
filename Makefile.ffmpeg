@@ -560,6 +560,7 @@ endif
 ifeq (yes,$(CONFIG_NVENC))
 
 EXTLIBS  += nvenc
+DECODERS += h264_nvdec hevc_nvdec
 ENCODERS += h264_nvenc hevc_nvenc
 
 $(LIB_ROOT)/$(FFNVCODEC)/.tvh_download:
