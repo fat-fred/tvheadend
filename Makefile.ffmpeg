@@ -101,7 +101,7 @@ FFNVCODEC_VER  = 9.1.23.1
 FFNVCODEC      = nv-codec-headers-n$(FFNVCODEC_VER)
 FFNVCODEC_TB   = $(FFNVCODEC).tar.gz
 FFNVCODEC_URL  = https://github.com/FFmpeg/nv-codec-headers/releases/download/n$(FFNVCODEC_VER)/nv-codec-headers-$(FFNVCODEC_VER).tar.gz
-FFNVCODEC_SHA1 = 04fd6043af295ceefc3856ebca57e80c16754517
+FFNVCODEC_SHA1 = 30dfa8b2dc4d4acf85a64091c393235d885c5ae5
 
 FFMPEG         = ffmpeg-4.2.1
 FFMPEG_TB      = $(FFMPEG).tar.bz2
