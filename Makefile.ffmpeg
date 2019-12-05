@@ -98,9 +98,9 @@ LIBOPUS_URL    = https://archive.mozilla.org/pub/opus/$(LIBOPUS_TB)
 LIBOPUS_SHA1   = ed226536537861c9f0f1ef7ca79dffc225bc181b
 
 FFNVCODEC_VER  = 9.1.23.1
-FFNVCODEC      = nv-codec-headers-n$(FFNVCODEC_VER)
+FFNVCODEC      = nv-codec-headers-$(FFNVCODEC_VER)
 FFNVCODEC_TB   = $(FFNVCODEC).tar.gz
-FFNVCODEC_URL  = https://github.com/FFmpeg/nv-codec-headers/releases/download/n$(FFNVCODEC_VER)/nv-codec-headers-$(FFNVCODEC_VER).tar.gz
+FFNVCODEC_URL  = https://github.com/FFmpeg/nv-codec-headers/releases/download/n$(FFNVCODEC_VER)/nv-codec-headers-n$(FFNVCODEC_VER).tar.gz
 FFNVCODEC_SHA1 = 30dfa8b2dc4d4acf85a64091c393235d885c5ae5
 
 FFMPEG         = ffmpeg-4.2.1
