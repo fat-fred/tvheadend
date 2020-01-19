@@ -49,13 +49,13 @@ NASM_DATE      = 20180615
 NASM           = nasm-$(NASM_VER)-$(NASM_DATE)
 NASM_TB        = $(NASM).tar.gz
 NASM_URL       = https://www.nasm.us/pub/nasm/snapshots/$(NASM_DATE)/$(NASM_TB)
-NASM_SHA1      = 969e2351ca14388c465845b128ece79db17ca6d3
+NASM_SHA1      = 6adf659442aaef1043e76e979a431789a50fe828
 NASM_DIFFS     = remove-invalid-pure_func-qualifiers.diff
 
-LIBX264        = x264-snapshot-20191008-2245
+LIBX264        = x264-snapshot-20191217-2245
 LIBX264_TB     = $(LIBX264).tar.bz2
 LIBX264_URL    = http://ftp.videolan.org/x264/snapshots/$(LIBX264_TB)
-LIBX264_SHA1   = e4bdd35fb1b92eb294e15e41e9b530369403ac36
+LIBX264_SHA1   = f2c36c5a2e81eb0456af4e1f06b827d98ccc6c18
 
 LIBX265        = x265_3.2.1
 LIBX265_TB     = $(LIBX265).tar.gz
