@@ -44,11 +44,14 @@ BSFS           = h264_mp4toannexb hevc_mp4toannexb
 FILTERS        = yadif format hwupload hwdownload scale null aresample anull
 HWACCELS       =
 
-NASM_VER       = 2.15rc0
-NASM_DATE      = 20190316
-NASM           = nasm-$(NASM_VER)-$(NASM_DATE)
+//NASM_VER       = 2.15rc0
+//NASM_DATE      = 20190316
+//NASM           = nasm-$(NASM_VER)-$(NASM_DATE)
+NASM_VER       = bb42d30737f28485c6a1133e73038840b5bf920c
+NASM           = $(NASM_VER)
 NASM_TB        = $(NASM).tar.gz
-NASM_URL       = https://www.nasm.us/pub/nasm/snapshots/$(NASM_DATE)/$(NASM_TB)
+NASM_URL       = https://repo.or.cz/nasm.git/snapshot/$(NASM_TB)
+//NASM_URL       = https://www.nasm.us/pub/nasm/snapshots/$(NASM_DATE)/$(NASM_TB)
 NASM_SHA1      = 813a3c4cb1cddf3fcd572d53d20c475ef72a8350
 NASM_DIFFS     = remove-invalid-pure_func-qualifiers.diff
 
@@ -76,7 +79,7 @@ LIBVPX_SHA1    = 7fbc7de47f59431fa2c5b76660f115963e83193d
 LIBOGG         = libogg-1.3.4
 LIBOGG_TB      = $(LIBOGG).tar.gz
 LIBOGG_URL     = http://downloads.xiph.org/releases/ogg/$(LIBOGG_TB)
-LIBOGG_SHA1    = 28ba40fd2e2d41988f658a0016fa7b534e509bc0
+LIBOGG_SHA1    = 851cef020b346d44893e5d1c3dab83c675d479d9
 
 LIBTHEORA      = libtheora-1.2.0alpha1
 LIBTHEORA_TB   = $(LIBTHEORA).tar.gz
