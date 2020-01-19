@@ -44,8 +44,8 @@ BSFS           = h264_mp4toannexb hevc_mp4toannexb
 FILTERS        = yadif format hwupload hwdownload scale null aresample anull
 HWACCELS       =
 
-NASM_VER       = 2.15rc0
-NASM_DATE      = 20191023
+NASM_VER       = 2.14rc4
+NASM_DATE      = 20180615
 NASM           = nasm-$(NASM_VER)-$(NASM_DATE)
 NASM_TB        = $(NASM).tar.gz
 NASM_URL       = https://www.nasm.us/pub/nasm/snapshots/$(NASM_DATE)/$(NASM_TB)
