@@ -44,15 +44,11 @@ BSFS           = h264_mp4toannexb hevc_mp4toannexb
 FILTERS        = yadif format hwupload hwdownload scale null aresample anull
 HWACCELS       =
 
-#NASM_VER       = 2.15rc0
-#NASM_DATE      = 20190316
-#NASM           = nasm-$(NASM_VER)-$(NASM_DATE)
-NASM_VER       = bb42d30737f28485c6a1133e73038840b5bf920c
-NASM           = nasm-bb42d30
-#NASM           = nasm-bb42d30 $(NASM_VER)
+NASM_VER       = 2.15rc0
+NASM_DATE      = 20190316
+NASM           = nasm-$(NASM_VER)-$(NASM_DATE)
 NASM_TB        = $(NASM_VER).tar.gz
-NASM_URL       = https://repo.or.cz/nasm.git/snapshot/$(NASM_TB)
-#NASM_URL       = https://www.nasm.us/pub/nasm/snapshots/$(NASM_DATE)/$(NASM_TB)
+NASM_URL       = https://www.nasm.us/pub/nasm/snapshots/$(NASM_DATE)/$(NASM_TB)
 NASM_SHA1      = 4a79721db061387ea1411ff4a3ecc8762466d0ce
 NASM_DIFFS     = remove-invalid-pure_func-qualifiers.diff
 
