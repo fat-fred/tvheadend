@@ -45,7 +45,7 @@ FILTERS        = yadif format hwupload hwdownload scale null aresample anull
 HWACCELS       =
 
 NASM_VER       = 2.15rc0
-NASM_DATE      = 20190222
+NASM_DATE      = 20190424
 NASM           = nasm-$(NASM_VER)-$(NASM_DATE)
 NASM_TB        = $(NASM).tar.gz
 NASM_URL       = https://www.nasm.us/pub/nasm/snapshots/$(NASM_DATE)/$(NASM_TB)
@@ -71,7 +71,7 @@ LIBVPX_VER     = 1.8.2
 LIBVPX         = libvpx-$(LIBVPX_VER)
 LIBVPX_TB      = $(LIBVPX).tar.gz
 LIBVPX_URL     = https://github.com/webmproject/libvpx/archive/v$(LIBVPX_VER)/$(LIBVPX_TB)
-LIBVPX_SHA1    = 6c9a55e1f92d7301383f387486bb574f22faf855
+LIBVPX_SHA1    = 7fbc7de47f59431fa2c5b76660f115963e83193d
 
 LIBOGG         = libogg-1.3.4
 LIBOGG_TB      = $(LIBOGG).tar.gz
