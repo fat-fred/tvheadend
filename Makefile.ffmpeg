@@ -45,7 +45,7 @@ FILTERS        = yadif format hwupload hwdownload scale null aresample anull
 HWACCELS       =
 
 NASM_VER       = 2.15rc0
-NASM_DATE      = 20190111
+NASM_DATE      = 20191004
 NASM           = nasm-$(NASM_VER)-$(NASM_DATE)
 NASM_TB        = $(NASM).tar.gz
 NASM_URL       = https://www.nasm.us/pub/nasm/snapshots/$(NASM_DATE)/$(NASM_TB)
@@ -60,7 +60,7 @@ LIBX264_SHA1   = f2c36c5a2e81eb0456af4e1f06b827d98ccc6c18
 LIBX265        = x265_3.2.1
 LIBX265_TB     = $(LIBX265).tar.gz
 LIBX265_URL    = http://ftp.videolan.org/videolan/x265/$(LIBX265_TB)
-LIBX265_SHA1   = 5922f88d0997c47e2c95feee95dc98bcb2e54871
+LIBX265_SHA1   = 0bd4889ff3ad596372ce2338f2d896947a2eec53
 ifeq ($(CONFIG_PIE),yes)
 LIBX265_DIFFS  = libx265.pie.diff
 else
