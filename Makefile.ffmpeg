@@ -49,7 +49,7 @@ NASM_DATE      = 20190222
 NASM           = nasm-$(NASM_VER)-$(NASM_DATE)
 NASM_TB        = $(NASM).tar.gz
 NASM_URL       = https://www.nasm.us/pub/nasm/snapshots/$(NASM_DATE)/$(NASM_TB)
-NASM_SHA1      = 7a73c913950957a9c6841d61d9d8a83b44590f19
+NASM_SHA1      = ed91dc52301b93d8432aca65de5cb520106faabc
 NASM_DIFFS     = remove-invalid-pure_func-qualifiers.diff
 
 LIBX264        = x264-snapshot-20191217-2245
