@@ -58,8 +58,8 @@ static int
 tvh_codec_profile_libx26x_open(tvh_codec_profile_libx26x_t *self,
                                AVDictionary **opts)
 {
-    AV_DICT_SET(opts, "preset", self->preset, 0);
-    AV_DICT_SET(opts, "tune", self->tune, 0);
+    AV_DICT_SET(opts, "preset:v", self->preset, 0);
+    AV_DICT_SET(opts, "tune:v", self->tune, 0);
     return 0;
 }
 

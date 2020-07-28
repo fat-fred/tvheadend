@@ -39,13 +39,15 @@
 #define NV_ENC_PARAMS_RC_CONSTQP               1
 #define NV_ENC_PARAMS_RC_VBR                   2
 #define NV_ENC_PARAMS_RC_CBR                   3
-#define NV_ENC_PARAMS_RC_VBR_MINQP             4
-#define NV_ENC_PARAMS_RC_2_PASS_QUALITY        5
-#define NV_ENC_PARAMS_RC_2_PASS_FRAMESIZE_CAP  6
-#define NV_ENC_PARAMS_RC_2_PASS_VBR            7
-
+//#define NV_ENC_PARAMS_RC_VBR_MINQP             4 DEPRECATED
+//#define NV_ENC_PARAMS_RC_2_PASS_QUALITY        5 DEPRECATED
+//#define NV_ENC_PARAMS_RC_2_PASS_FRAMESIZE_CAP  6 DEPRECATED
+//#define NV_ENC_PARAMS_RC_2_PASS_VBR            7 DEPRECATED
+#define NV_ENC_PARAMS_RC_CBR_LD_HQ             4
+#define NV_ENC_PARAMS_RC_CBR_HQ                5
+#define NV_ENC_PARAMS_RC_VBR_HQ               6
 #define AV_DICT_SET_CQ(d, v, a) \
-    AV_DICT_SET_INT((d), "cq", (v) ? (v) : (a), AV_DICT_DONT_OVERWRITE)
+    AV_DICT_SET_INT((d), "cq:v", (v) ? (v) : (a), AV_DICT_DONT_OVERWRITE)
 
 
 /* nvenc ==================================================================== */
@@ -81,10 +83,13 @@ tvh_codec_profile_nvenc_open(tvh_codec_profile_nvenc_t *self,
         {"constqp",	      NV_ENC_PARAMS_RC_CONSTQP},
         {"vbr",               NV_ENC_PARAMS_RC_VBR},
         {"cbr",               NV_ENC_PARAMS_RC_CBR},
-        {"vbr_minqp",         NV_ENC_PARAMS_RC_VBR_MINQP},
-        {"ll_2pass_quality",  NV_ENC_PARAMS_RC_2_PASS_QUALITY},
-        {"ll_2pass_size",     NV_ENC_PARAMS_RC_2_PASS_FRAMESIZE_CAP},
-        {"vbr_2pass",         NV_ENC_PARAMS_RC_2_PASS_VBR},
+        //{"vbr_minqp",         NV_ENC_PARAMS_RC_VBR_MINQP}, DEPRECATED
+        //{"ll_2pass_quality",  NV_ENC_PARAMS_RC_2_PASS_QUALITY}, DEPRECATED
+        //{"ll_2pass_size",     NV_ENC_PARAMS_RC_2_PASS_FRAMESIZE_CAP}, DEPRECATED
+        //{"vbr_2pass",         NV_ENC_PARAMS_RC_2_PASS_VBR}, DEPRECATED
+        {"cbr_ld_hq",         NV_ENC_PARAMS_RC_CBR_LD_HQ},
+        {"cbr_hq",         NV_ENC_PARAMS_RC_CBR_HQ},
+        {"vbr_hq",         NV_ENC_PARAMS_RC_VBR_HQ},
     };
     const char *s;
 
@@ -99,6 +104,9 @@ tvh_codec_profile_nvenc_open(tvh_codec_profile_nvenc_t *self,
     }
     if (self->bit_rate) {
         AV_DICT_SET_BIT_RATE(opts, self->bit_rate);
+    }
+    if (self->tag) {
+        AV_DICT_SET_TAG(opts, self->tag);
     }
     AV_DICT_SET_INT(opts, "quality", self->quality, 0);
     return 0;
@@ -139,10 +147,13 @@ codec_profile_nvenc_class_rc_list(void *obj, const char *lang)
         {N_("Constant QP mode"),		  NV_ENC_PARAMS_RC_CONSTQP},
         {N_("VBR mode"),   			  NV_ENC_PARAMS_RC_VBR},
         {N_("CBR mode"), 	  		  NV_ENC_PARAMS_RC_CBR},
-        {N_("VBR mode with MinQP"), 	          NV_ENC_PARAMS_RC_VBR_MINQP},
-        {N_("VBR multi-pass LL quality mode"), 	  NV_ENC_PARAMS_RC_2_PASS_QUALITY},
-        {N_("VBR multi-pass LL frame size mode"), NV_ENC_PARAMS_RC_2_PASS_FRAMESIZE_CAP},
-        {N_("VBR multi-pass mode"), 		  NV_ENC_PARAMS_RC_2_PASS_VBR},
+        //{N_("VBR mode with MinQP"), 	          NV_ENC_PARAMS_RC_VBR_MINQP}, DEPRECATED
+        //{N_("VBR multi-pass LL quality mode"), 	  NV_ENC_PARAMS_RC_2_PASS_QUALITY}, DEPRECATED
+        //{N_("VBR multi-pass LL frame size mode"), NV_ENC_PARAMS_RC_2_PASS_FRAMESIZE_CAP}, DEPRECATED
+        //{N_("VBR multi-pass mode"), 		  NV_ENC_PARAMS_RC_2_PASS_VBR}, DEPRECATED
+        {N_("CBR low delay HQ mode"), 		  NV_ENC_PARAMS_RC_CBR_LD_HQ},
+        {N_("CBR HQ mode"), 		  NV_ENC_PARAMS_RC_CBR_HQ},
+        {N_("VBR HQ mode"), 		  NV_ENC_PARAMS_RC_CBR_HQ},
     };
     return strtab2htsmsg(tab, 1, lang);
 }
@@ -219,6 +230,26 @@ static const codec_profile_class_t codec_profile_nvenc_class = {
                 .list     = codec_profile_nvenc_class_rc_list,
                 .def.i    = NV_ENC_PARAMS_RC_AUTO,
             },
+            {
+                .type     = PT_BOOL,
+                .id       = "vsync",
+                .name     = N_("V-Sync"),
+                .group    = 5,
+                .desc     = N_("with HWACCEL its better to disable."),
+                .opts     = PO_EXPERT,
+                .get_opts = codec_profile_class_get_opts,
+                .off      = offsetof(TVHCodecProfile, vsync),
+            },
+            {
+                .type     = PT_STR,
+                .id       = "tag",
+                .name     = N_("Video Tag"),
+                .group    = 5,
+                .desc     = N_("Override the tag of the Video."),
+                .opts     = PO_EXPERT,
+                .get_opts = codec_profile_class_get_opts,
+                .off      = offsetof(tvh_codec_profile_nvenc_t, tag),
+            },
             {}
         }
     },
@@ -281,6 +312,7 @@ TVHVideoCodec tvh_codec_nvenc_h264 = {
 static const AVProfile nvenc_hevc_profiles[] = {
     { FF_PROFILE_HEVC_MAIN,    "Main" },
     { FF_PROFILE_HEVC_MAIN_10, "Main 10" },
+    { FF_PROFILE_HEVC_REXT, "Rext" },
     { FF_PROFILE_UNKNOWN },
 };
 
@@ -291,6 +323,7 @@ tvh_codec_profile_nvenc_hevc_open(tvh_codec_profile_nvenc_t *self,
     static const struct strtab profiletab[] = {
         {"main",        FF_PROFILE_HEVC_MAIN},
         {"main10",      FF_PROFILE_HEVC_MAIN_10,},
+                {"rext",      FF_PROFILE_HEVC_REXT,},
     };
     const char *s;
 
