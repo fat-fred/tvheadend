@@ -10,36 +10,7 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: configure
-      run:  ./configure \
-	--enable-ffmpeg_static \
-	--enable-libfdkaac_static \
-	--enable-libtheora_static \
-	--enable-libopus_static \
-	--enable-libvorbis_static \
-	--enable-libvpx_static \
-	--enable-libx264_static \
-	--enable-libx265_static \
-	--enable-libfdkaac \
-	--enable-ccache \
-	--enable-avahi \
-	--enable-dbus1 \
-	--enable-inotify \
-	--enable-nvenc \
-	--disable-bintray_cache \
-	--disable-hdhomerun_static \
-	--disable-hdhomerun_client \
-	--disable-satip-server \
-	--enable-satip-client \
-	--enable-libav \
-	--enable-pngquant \
-	--enable-trace \
-	--disable-vaapi \
-	--enable-gperftools \
-	--infodir=/usr/share/info \
-	--localstatedir=/var \
-	--mandir=/usr/share/man \
-	--prefix=/usr \
-	--sysconfdir=/config
+      run:  ./configure --enable-ffmpeg_static --enable-libfdkaac_static --enable-libtheora_static --enable-libopus_static --enable-libvorbis_static --enable-libvpx_static --enable-libx264_static --enable-libx265_static --enable-libfdkaac --enable-ccache --enable-avahi --enable-dbus1 --enable-inotify --enable-nvenc --disable-bintray_cache --disable-hdhomerun_static --disable-hdhomerun_client --disable-satip-server --enable-satip-client --enable-libav --enable-pngquant --enable-trace --disable-vaapi --enable-gperftools --infodir=/usr/share/info --localstatedir=/var --mandir=/usr/share/man --prefix=/usr --sysconfdir=/config
     - name: make
       run: make
     - name: make check
