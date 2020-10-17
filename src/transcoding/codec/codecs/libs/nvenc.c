@@ -143,10 +143,6 @@ tvh_codec_profile_nvenc_open(tvh_codec_profile_nvenc_t *self,
     if (self->bit_rate) {
         AV_DICT_SET_BIT_RATE(opts, self->bit_rate);
     }
-    if (self->level != NV_ENC_LEVEL_AUTOSELECT &&
-        (s = val2str(self->level, leveltab)) != NULL) {
-        AV_DICT_SET(opts, "level", s, 0);
-    }
         AV_DICT_SET_INT(opts, "quality", self->quality, 0);
     return 0;
 }
@@ -272,6 +268,7 @@ static const codec_profile_class_t codec_profile_nvenc_class = {
                 .group    = 3,
                 .desc     = N_("Override the preset level."),
                 .opts     = PO_EXPERT,
+                .get_opts = codec_profile_class_get_opts,
                 .off      = offsetof(tvh_codec_profile_nvenc_t, level),
                 .list     = codec_profile_nvenc_class_level_list,
                 .def.i    = NV_ENC_PARAMS_LEVEL_AUTO,
@@ -304,7 +301,7 @@ tvh_codec_profile_nvenc_h264_open(tvh_codec_profile_nvenc_t *self,
         {"high",        NV_ENC_H264_PROFILE_HIGH,},
         {"high444p",    NV_ENC_H264_PROFILE_HIGH_444P},
     };
-    
+ 
     static const struct strtab leveltab[] = {
         {"Auto",	      NV_ENC_LEVEL_AUTOSELECT},
         {"1.0",           NV_ENC_LEVEL_H264_1},
@@ -327,7 +324,12 @@ tvh_codec_profile_nvenc_h264_open(tvh_codec_profile_nvenc_t *self,
         {"6.1",           NV_ENC_LEVEL_H264_61},
         {"6.2",           NV_ENC_LEVEL_H264_62},
     };
-   const char *s;
+       const char *s;
+
+    if (self->level != NV_ENC_LEVEL_AUTOSELECT &&
+        (s = val2str(self->level, leveltab)) != NULL) {
+        AV_DICT_SET(opts, "level", s, 0);
+    }
 
     if (self->nvenc_profile != NV_ENC_PROFILE_UNKNOWN &&
         (s = val2str(self->nvenc_profile, profiletab)) != NULL)
@@ -403,6 +405,11 @@ tvh_codec_profile_nvenc_hevc_open(tvh_codec_profile_nvenc_t *self,
         {"6.2",           NV_ENC_LEVEL_HEVC_62},
     };
     const char *s;
+
+    if (self->level != NV_ENC_LEVEL_AUTOSELECT &&
+        (s = val2str(self->level, leveltab)) != NULL) {
+        AV_DICT_SET(opts, "level", s, 0);
+    }
 
     if (self->nvenc_profile != NV_ENC_PROFILE_UNKNOWN &&
         (s = val2str(self->nvenc_profile, profiletab)) != NULL)
