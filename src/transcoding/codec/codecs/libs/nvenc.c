@@ -100,7 +100,7 @@ typedef struct {
     int devicenum;
     int preset;
     int rc;
-    int level;
+    //int level;
     int quality;
 } tvh_codec_profile_nvenc_t;
 
@@ -190,6 +190,13 @@ codec_profile_nvenc_class_rc_list(void *obj, const char *lang)
     return strtab2htsmsg(tab, 1, lang);
 }
 
+static htsmsg_t *
+codec_profile_nvenc_class_level_list(void *obj, const char *lang)
+{
+    TVHCodec *codec = tvh_codec_profile_get_codec(obj);
+    return tvh_codec_get_list(codec, levels);
+}
+
 static const codec_profile_class_t codec_profile_nvenc_class = {
     {
         .ic_super      = (idclass_t *)&codec_profile_video_class,
@@ -272,7 +279,7 @@ static const codec_profile_class_t codec_profile_nvenc_class = {
                 .get_opts = codec_profile_class_get_opts,
                 .off      = offsetof(tvh_codec_profile_nvenc_t, level),
                 .list     = codec_profile_nvenc_class_level_list,
-                .def.i    = NV_ENC_PARAMS_LEVEL_AUTO,
+                .def.i    = NV_ENC_LEVEL_AUTOSELECT,
             },
             {}
         }
@@ -290,6 +297,29 @@ static const AVProfile nvenc_h264_profiles[] = {
     { NV_ENC_H264_PROFILE_HIGH,                 "High" },
     { NV_ENC_H264_PROFILE_HIGH_444P,            "High 444P" },
     { NV_ENC_PROFILE_UNKNOWN },
+};
+
+static const AVProfile nvenc_h264_levels[] = {
+    { NV_ENC_LEVEL_H264_1,             "1.0" },
+    { NV_ENC_LEVEL_H264_1b,            "1.0b"},
+    { NV_ENC_LEVEL_H264_11,            "1.1" },
+    { NV_ENC_LEVEL_H264_12,            "1.2" },
+    { NV_ENC_LEVEL_H264_13,            "1.3" },
+    { NV_ENC_LEVEL_H264_2,             "2.0" },
+    { NV_ENC_LEVEL_H264_21,            "2.1" },
+    { NV_ENC_LEVEL_H264_22,            "2.2" },
+    { NV_ENC_LEVEL_H264_3,             "3.0" },
+    { NV_ENC_LEVEL_H264_31,            "3.1" },
+    { NV_ENC_LEVEL_H264_32,            "3.2" },
+    { NV_ENC_LEVEL_H264_4,             "4.0" },
+    { NV_ENC_LEVEL_H264_41,            "4.1" },
+    { NV_ENC_LEVEL_H264_42,            "4.2" },
+    { NV_ENC_LEVEL_H264_5,             "5.0" },
+    { NV_ENC_LEVEL_H264_51,            "5.1" },
+    { NV_ENC_LEVEL_H264_6,             "6.0" },
+    { NV_ENC_LEVEL_H264_61,            "6.1" },
+    { NV_ENC_LEVEL_H264_62,            "6.2" },
+    { NV_ENC_LEVEL_AUTOSELECT },
 };
 
 static int
@@ -325,7 +355,8 @@ tvh_codec_profile_nvenc_h264_open(tvh_codec_profile_nvenc_t *self,
         {"6.1",           NV_ENC_LEVEL_H264_61},
         {"6.2",           NV_ENC_LEVEL_H264_62},
     };
-       const char *s;
+
+    const char *s;
 
     if (self->level != NV_ENC_LEVEL_AUTOSELECT &&
         (s = val2str(self->level, leveltab)) != NULL) {
@@ -367,6 +398,7 @@ TVHVideoCodec tvh_codec_nvenc_h264 = {
     .size     = sizeof(tvh_codec_profile_nvenc_t),
     .idclass  = &codec_profile_nvenc_h264_class,
     .profiles = nvenc_h264_profiles,
+    .levels   = nvenc_h264_levels,
 };
 
 
@@ -377,6 +409,22 @@ static const AVProfile nvenc_hevc_profiles[] = {
     { NV_ENC_HEVC_PROFILE_MAIN_10, "Main 10" },
     { NV_ENC_HEVC_PROFILE_REXT, "Rext" },
     { NV_ENC_PROFILE_UNKNOWN },
+};
+
+static const AVProfile nvenc_h264_levels[] = {
+    { NV_ENC_LEVEL_HEVC_1,             "1.0" },
+    { NV_ENC_LEVEL_HEVC_2,             "2.0" },
+    { NV_ENC_LEVEL_HEVC_21,            "2.1" },
+    { NV_ENC_LEVEL_HEVC_3,             "3.0" },
+    { NV_ENC_LEVEL_HEVC_31,            "3.1" },
+    { NV_ENC_LEVEL_HEVC_4,             "4.0" },
+    { NV_ENC_LEVEL_HEVC_41,            "4.1" },
+    { NV_ENC_LEVEL_HEVC_5,             "5.0" },
+    { NV_ENC_LEVEL_HEVC_51,            "5.1" },
+    { NV_ENC_LEVEL_HEVC_6,             "6.0" },
+    { NV_ENC_LEVEL_HEVC_61,            "6.1" },
+    { NV_ENC_LEVEL_HEVC_62,            "6.2" },
+    { NV_ENC_LEVEL_AUTOSELECT },
 };
 
 static int
@@ -405,6 +453,7 @@ tvh_codec_profile_nvenc_hevc_open(tvh_codec_profile_nvenc_t *self,
         {"6.1",           NV_ENC_LEVEL_HEVC_61},
         {"6.2",           NV_ENC_LEVEL_HEVC_62},
     };
+
     const char *s;
 
     if (self->level != NV_ENC_LEVEL_AUTOSELECT &&
@@ -446,4 +495,5 @@ TVHVideoCodec tvh_codec_nvenc_hevc = {
     .profiles = nvenc_hevc_profiles,
     .profile_init = tvh_codec_profile_video_init,
     .profile_destroy = tvh_codec_profile_video_destroy,
+    .levels   = nvenc_hevc_levels,
 };
