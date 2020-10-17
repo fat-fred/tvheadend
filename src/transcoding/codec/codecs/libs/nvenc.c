@@ -43,6 +43,7 @@
 #define NV_ENC_PARAMS_RC_CBR_HQ                16
 #define NV_ENC_PARAMS_RC_VBR_HQ                32
 
+#define NV_ENC_PROFILE_UNKNOWN                      4
 #define NV_ENC_H264_PROFILE_BASELINE			    0
 #define NV_ENC_H264_PROFILE_MAIN			        1
 #define NV_ENC_H264_PROFILE_HIGH			        2
