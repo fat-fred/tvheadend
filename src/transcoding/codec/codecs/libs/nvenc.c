@@ -191,7 +191,7 @@ codec_profile_nvenc_class_rc_list(void *obj, const char *lang)
 }
 
 static htsmsg_t *
-codec_profile_nvenc_class_list(void *obj, const char *lang)
+codec_profile_nvenc_class_level_list(void *obj, const char *lang)
 {
     TVHCodec *codec = tvh_codec_profile_get_codec(obj);
     return tvh_codec_get_list(codec, level);
@@ -458,7 +458,7 @@ tvh_codec_profile_nvenc_hevc_open(tvh_codec_profile_nvenc_t *self,
 
     if (self->level != NV_ENC_LEVEL_AUTOSELECT &&
         (s = val2str(self->level, leveltab)) != NULL) {
-        AV_DICT_SET_INT(opts, "level", s, 0);
+        AV_DICT_SET(opts, "level", s, 0);
     }
 
     if (self->nvenc_profile != NV_ENC_PROFILE_UNKNOWN &&
