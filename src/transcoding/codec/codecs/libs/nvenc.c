@@ -65,7 +65,7 @@
 #define NV_ENC_LEVEL_H264_42                        42
 #define NV_ENC_LEVEL_H264_5                         50
 #define NV_ENC_LEVEL_H264_51                        51
-#define NV_ENC_LEVEL_H264_60                        60
+#define NV_ENC_LEVEL_H264_6                        60
 #define NV_ENC_LEVEL_H264_61                        61
 #define NV_ENC_LEVEL_H264_62                        62
 
