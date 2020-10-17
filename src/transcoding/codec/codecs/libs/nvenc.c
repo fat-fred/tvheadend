@@ -331,7 +331,7 @@ tvh_codec_profile_nvenc_h264_open(tvh_codec_profile_nvenc_t *self,
     if (self->nvenc_profile != NV_ENC_PROFILE_UNKNOWN &&
         (s = val2str(self->nvenc_profile, profiletab)) != NULL)
     AV_DICT_SET(opts, "profile", s, 0);
-    # ------ Set Defaults ---------
+    // ------ Set Defaults ---------
     AV_DICT_SET(opts, "b", "2M", 0);
     AV_DICT_SET(opts, "qmin", "-1", 0);
     AV_DICT_SET(opts, "qmax", "-1", 0);
@@ -406,7 +406,7 @@ tvh_codec_profile_nvenc_hevc_open(tvh_codec_profile_nvenc_t *self,
     if (self->nvenc_profile != NV_ENC_PROFILE_UNKNOWN &&
         (s = val2str(self->nvenc_profile, profiletab)) != NULL)
     AV_DICT_SET(opts, "profile", s, 0);
-    # ------ Set Defaults ---------
+    // ------ Set Defaults ---------
     AV_DICT_SET(opts, "b", "2M", 0);
     AV_DICT_SET(opts, "qmin", "-1", 0);
     AV_DICT_SET(opts, "qmax", "-1", 0);
