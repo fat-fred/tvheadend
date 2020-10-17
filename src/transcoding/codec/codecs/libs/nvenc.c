@@ -278,7 +278,7 @@ static const codec_profile_class_t codec_profile_nvenc_class = {
                 .opts     = PO_EXPERT,
                 .get_opts = codec_profile_class_get_opts,
                 .off      = offsetof(tvh_codec_profile_nvenc_t, level),
-                .list     = codec_profile_nvenc_class_list,
+                .list     = codec_profile_nvenc_class_level_list,
                 .def.i    = NV_ENC_LEVEL_AUTOSELECT,
             },
             {}
@@ -329,7 +329,7 @@ tvh_codec_profile_nvenc_h264_open(tvh_codec_profile_nvenc_t *self,
     static const struct strtab profiletab[] = {
         {"baseline",    NV_ENC_H264_PROFILE_BASELINE},
         {"main",        NV_ENC_H264_PROFILE_MAIN},
-        {"high",        NV_ENC_H264_PROFILE_HIGH,},
+        {"high",        NV_ENC_H264_PROFILE_HIGH},
         {"high444p",    NV_ENC_H264_PROFILE_HIGH_444P},
     };
  
@@ -433,8 +433,8 @@ tvh_codec_profile_nvenc_hevc_open(tvh_codec_profile_nvenc_t *self,
 {
     static const struct strtab profiletab[] = {
         {"main",        NV_ENC_HEVC_PROFILE_MAIN},
-        {"main10",      NV_ENC_HEVC_PROFILE_MAIN_10,},
-        {"rext",        NV_ENC_HEVC_PROFILE_REXT,},
+        {"main10",      NV_ENC_HEVC_PROFILE_MAIN_10},
+        {"rext",        NV_ENC_HEVC_PROFILE_REXT},
     };
 
     static const struct strtab leveltab[] = {
@@ -458,7 +458,7 @@ tvh_codec_profile_nvenc_hevc_open(tvh_codec_profile_nvenc_t *self,
 
     if (self->level != NV_ENC_LEVEL_AUTOSELECT &&
         (s = val2str(self->level, leveltab)) != NULL) {
-        AV_DICT_SET(opts, "level", s, 0);
+        AV_DICT_SET_INT(opts, "level", s, 0);
     }
 
     if (self->nvenc_profile != NV_ENC_PROFILE_UNKNOWN &&
