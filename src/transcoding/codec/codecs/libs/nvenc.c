@@ -194,7 +194,7 @@ static htsmsg_t *
 codec_profile_nvenc_class_level_list(void *obj, const char *lang)
 {
     TVHCodec *codec = tvh_codec_profile_get_codec(obj);
-    return tvh_codec_get_list(codec, level);
+    return tvh_codec_get_list(codec, levels);
 }
 
 static const codec_profile_class_t codec_profile_nvenc_class = {
@@ -495,5 +495,5 @@ TVHVideoCodec tvh_codec_nvenc_hevc = {
     .profiles = nvenc_hevc_profiles,
     .profile_init = tvh_codec_profile_video_init,
     .profile_destroy = tvh_codec_profile_video_destroy,
-    .level    = nvenc_hevc_levels,
+    .levels    = nvenc_hevc_levels,
 };
