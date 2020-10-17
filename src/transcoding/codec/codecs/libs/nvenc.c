@@ -100,7 +100,7 @@ typedef struct {
     int devicenum;
     int preset;
     int rc;
-    //int level;
+    int level;
     int quality;
 } tvh_codec_profile_nvenc_t;
 
