@@ -93,7 +93,6 @@ struct tvh_codec_profile {
     double bit_rate;
     double qscale;
     int profile;
-    int level;
     char *device; // for hardware acceleration
     LIST_ENTRY(tvh_codec_profile) link;
 };
