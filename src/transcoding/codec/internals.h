@@ -168,7 +168,7 @@ htsmsg_t *
 tvh_codec_get_list_profiles(TVHCodec *self);
 
 htsmsg_t *
-tvh_codec_get_list_levels(TVHCodec *self);
+tvh_codec_get_list_level(TVHCodec *self);
 
 /* codec_profile_video_class */
 
