@@ -182,6 +182,12 @@ codec_profile_class_profile_list(void *obj, const char *lang)
     return tvh_codec_get_list(codec, profiles);
 }
 
+static htsmsg_t *
+codec_profile_nvenc_class_level_list(void *obj, const char *lang)
+{
+    TVHCodec *codec = tvh_codec_profile_get_codec(obj);
+    return tvh_codec_get_list(codec, level);
+}
 
 /* codec_profile_class */
 CLASS_DOC(codec_profile)
