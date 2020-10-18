@@ -64,7 +64,7 @@ struct tvh_codec {
     int (*profile_init)(TVHCodecProfile *, htsmsg_t *conf);
     void (*profile_destroy)(TVHCodecProfile *);
     SLIST_ENTRY(tvh_codec) link;
-    const AVProfile *levels;
+    const AVProfile *level;
 };
 
 SLIST_HEAD(TVHCodecs, tvh_codec);
