@@ -64,6 +64,7 @@ struct tvh_codec {
     int (*profile_init)(TVHCodecProfile *, htsmsg_t *conf);
     void (*profile_destroy)(TVHCodecProfile *);
     SLIST_ENTRY(tvh_codec) link;
+    const AVProfile *levels;
 };
 
 SLIST_HEAD(TVHCodecs, tvh_codec);
@@ -92,6 +93,7 @@ struct tvh_codec_profile {
     double bit_rate;
     double qscale;
     int profile;
+    int level;
     char *device; // for hardware acceleration
     LIST_ENTRY(tvh_codec_profile) link;
 };
