@@ -147,9 +147,6 @@ tvh_codec_init(TVHCodec *self, AVCodec *codec)
     if (!self->profiles) {
         self->profiles = codec->profiles;
     }
-    if (!self->levels) {
-        self->levels = codec->levels;
-    }
     switch (codec->type) {
         case AVMEDIA_TYPE_VIDEO:
             tvh_codec_video_init((TVHVideoCodec *)self, codec);
