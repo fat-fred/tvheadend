@@ -398,7 +398,7 @@ TVHVideoCodec tvh_codec_nvenc_h264 = {
     .size     = sizeof(tvh_codec_profile_nvenc_t),
     .idclass  = &codec_profile_nvenc_h264_class,
     .profiles = nvenc_h264_profiles,
-    .levels    = nvenc_h264_levels,
+    //.levels    = nvenc_h264_levels,
 };
 
 
