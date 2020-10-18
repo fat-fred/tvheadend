@@ -299,7 +299,7 @@ static const AVProfile nvenc_h264_profiles[] = {
     { NV_ENC_PROFILE_UNKNOWN },
 };
 
-static const AVProfile nvenc_h264_levels[] = {
+static const AVPixelFormat nvenc_h264_levels[] = {
     { NV_ENC_LEVEL_H264_1,             "1.0" },
     { NV_ENC_LEVEL_H264_1b,            "1.0b"},
     { NV_ENC_LEVEL_H264_11,            "1.1" },
@@ -411,7 +411,7 @@ static const AVProfile nvenc_hevc_profiles[] = {
     { NV_ENC_PROFILE_UNKNOWN },
 };
 
-static const AVProfile nvenc_hevc_levels[] = {
+static const AVPixelFormat nvenc_hevc_levels[] = {
     { NV_ENC_LEVEL_HEVC_1,             "1.0" },
     { NV_ENC_LEVEL_HEVC_2,             "2.0" },
     { NV_ENC_LEVEL_HEVC_21,            "2.1" },
