@@ -360,7 +360,7 @@ return 0;
 }
 
 static htsmsg_t *
-codec_profile_nvenc_class_level_list_hevc(void *obj, const char *lang)
+codec_profile_nvenc_class_level_list_h264(void *obj, const char *lang)
 {
     static const struct strtab tab[] = {
         {N_("Auto"),	      NV_ENC_LEVEL_AUTOSELECT},
@@ -401,7 +401,7 @@ static const codec_profile_class_t codec_profile_nvenc_h264_class = {
                 .desc     = N_("Override the preset level."),
                 .opts     = PO_EXPERT,
                 .off      = offsetof(tvh_codec_profile_nvenc_t, level),
-                .list     = codec_profile_nvenc_class_level_list_hevc,
+                .list     = codec_profile_nvenc_class_level_list_h264,
                 .def.i    = NV_ENC_LEVEL_AUTOSELECT,
             },
             {}
