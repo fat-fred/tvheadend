@@ -337,7 +337,7 @@ return 0;
 }
 
 static htsmsg_t *
-codec_profile_nvenc_class_level_list_h264(void *obj)
+codec_profile_nvenc_class_level_list_h264(void *obj, const char *lang)
 {
     static const struct strtab tab[] = {
         {"Auto",	      NV_ENC_LEVEL_AUTOSELECT},
