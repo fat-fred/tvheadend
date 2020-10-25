@@ -48,7 +48,7 @@
 #define NV_ENC_H264_PROFILE_HIGH			        2
 #define NV_ENC_H264_PROFILE_HIGH_444P           	3
 
-#define NV_ENC_LEVEL_AUTOSELECT
+#define NV_ENC_LEVEL_AUTOSELECT                     0
 
 #define NV_ENC_LEVEL_H264_1                         10
 #define NV_ENC_LEVEL_H264_1b                        9
