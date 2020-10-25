@@ -363,7 +363,6 @@ static htsmsg_t *
 codec_profile_nvenc_class_level_list(void *obj, const char *lang)
 {
     static const struct strtab tab[] = {
-        {N_("Default"),		NV_ENC_LEVEL_H264_1},
         {N_("Auto"),	      NV_ENC_LEVEL_AUTOSELECT},
         {N_("1.0"),           NV_ENC_LEVEL_H264_1},
         {N_("1.0b"),          NV_ENC_LEVEL_H264_1b},
@@ -429,6 +428,7 @@ static const AVProfile nvenc_hevc_profiles[] = {
     { FF_PROFILE_UNKNOWN },
 };
 
+/*
 static const AVProfile nvenc_hevc_levels[] = {
     { NV_ENC_LEVEL_HEVC_1,             "1.0" },
     { NV_ENC_LEVEL_HEVC_2,             "2.0" },
@@ -444,6 +444,7 @@ static const AVProfile nvenc_hevc_levels[] = {
     { NV_ENC_LEVEL_HEVC_62,            "6.2" },
     { NV_ENC_LEVEL_AUTOSELECT },
 };
+*/
 
 static int
 tvh_codec_profile_nvenc_hevc_open(tvh_codec_profile_nvenc_t *self,
@@ -494,12 +495,47 @@ tvh_codec_profile_nvenc_hevc_open(tvh_codec_profile_nvenc_t *self,
     return 0;
 }
 
+static htsmsg_t *
+codec_profile_nvenc_class_level_list(void *obj, const char *lang)
+{
+    static const struct strtab tab[] = {
+        {N_("Auto"),	      NV_ENC_LEVEL_AUTOSELECT},
+        {N_("1.0"),           NV_ENC_LEVEL_HEVC_1},
+        {N_("2.0"),           NV_ENC_LEVEL_HEVC_2},
+        {N_("2.1"),           NV_ENC_LEVEL_HEVC_21},
+        {N_("3.0"),           NV_ENC_LEVEL_HEVC_3},
+        {N_("3.1"),           NV_ENC_LEVEL_HEVC_31},
+        {N_("4.0"),           NV_ENC_LEVEL_HEVC_4},
+        {N_("4.1"),           NV_ENC_LEVEL_HEVC_41},
+        {N_("5.0"),           NV_ENC_LEVEL_HEVC_5},
+        {N_("5.1"),           NV_ENC_LEVEL_HEVC_51},
+        {N_("5.2"),           NV_ENC_LEVEL_HEVC_52},
+        {N_("6.0"),           NV_ENC_LEVEL_HEVC_6},
+        {N_("6.1"),           NV_ENC_LEVEL_HEVC_61},
+        {N_("6.2"),           NV_ENC_LEVEL_HEVC_62},
+    };
+    return strtab2htsmsg(tab, 1, lang);
+}
 
 static const codec_profile_class_t codec_profile_nvenc_hevc_class = {
     {
         .ic_super      = (idclass_t *)&codec_profile_nvenc_class,
         .ic_class      = "codec_profile_nvenc_hevc",
         .ic_caption    = N_("nvenc_hevc")
+        .ic_properties = (const property_t[]){
+            {
+                .type     = PT_INT,
+                .id       = "level",
+                .name     = N_("Level"),
+                .group    = 3,
+                .desc     = N_("Override the preset level."),
+                .opts     = PO_EXPERT,
+                .off      = offsetof(tvh_codec_profile_nvenc_t, level),
+                .list     = codec_profile_nvenc_class_level_list,
+                .def.i    = NV_ENC_LEVEL_AUTOSELECT,
+            },
+            {}
+        }
     },
     .open = (codec_profile_open_meth)tvh_codec_profile_nvenc_hevc_open,
 };
