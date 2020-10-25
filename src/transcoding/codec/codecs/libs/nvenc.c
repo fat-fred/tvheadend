@@ -426,7 +426,7 @@ static const AVProfile nvenc_hevc_profiles[] = {
     { NV_ENC_HEVC_PROFILE_MAIN,    "Main" },
     { NV_ENC_HEVC_PROFILE_MAIN_10, "Main 10" },
     { NV_ENC_HEVC_PROFILE_REXT, "Rext" },
-    { NV_ENC_PROFILE_UNKNOWN },
+    { FF_PROFILE_UNKNOWN },
 };
 
 static const AVProfile nvenc_hevc_levels[] = {
