@@ -66,7 +66,7 @@
 #define NV_ENC_LEVEL_H264_42                        42
 #define NV_ENC_LEVEL_H264_5                         50
 #define NV_ENC_LEVEL_H264_51                        51
-#define NV_ENC_LEVEL_H264_6                        60
+#define NV_ENC_LEVEL_H264_6                         60
 #define NV_ENC_LEVEL_H264_61                        61
 #define NV_ENC_LEVEL_H264_62                        62
 
@@ -337,31 +337,31 @@ return 0;
 }
 
 static htsmsg_t *
-codec_profile_nvenc_class_level_list_h264(void *obj, const char *lang)
+codec_profile_nvenc_class_level_list_h264(void *obj)
 {
     static const struct strtab tab[] = {
-        {N_("Auto"),	      NV_ENC_LEVEL_AUTOSELECT},
-        {N_("1.0"),           NV_ENC_LEVEL_H264_1},
-        {N_("1.0b"),          NV_ENC_LEVEL_H264_1b},
-        {N_("1.1"),           NV_ENC_LEVEL_H264_11},
-        {N_("1.2"),           NV_ENC_LEVEL_H264_12},
-        {N_("1.3"),           NV_ENC_LEVEL_H264_13},
-        {N_("2.0"),           NV_ENC_LEVEL_H264_2},
-        {N_("2.1"),           NV_ENC_LEVEL_H264_21},
-        {N_("2.2"),           NV_ENC_LEVEL_H264_22},
-        {N_("3.0"),           NV_ENC_LEVEL_H264_3},
-        {N_("3.1"),           NV_ENC_LEVEL_H264_31},
-        {N_("3.2"),           NV_ENC_LEVEL_H264_32},
-        {N_("4.0"),           NV_ENC_LEVEL_H264_4},
-        {N_("4.1"),           NV_ENC_LEVEL_H264_41},
-        {N_("4.2"),           NV_ENC_LEVEL_H264_42},
-        {N_("5.0"),           NV_ENC_LEVEL_H264_5},
-        {N_("5.1"),           NV_ENC_LEVEL_H264_51},
-        {N_("6.0"),           NV_ENC_LEVEL_H264_6},
-        {N_("6.1"),           NV_ENC_LEVEL_H264_61},
-        {N_("6.2"),           NV_ENC_LEVEL_H264_62},
+        {"Auto",	      NV_ENC_LEVEL_AUTOSELECT},
+        {"1.0",           NV_ENC_LEVEL_H264_1},
+        {"1.0b",          NV_ENC_LEVEL_H264_1b},
+        {"1.1",           NV_ENC_LEVEL_H264_11},
+        {"1.2",           NV_ENC_LEVEL_H264_12},
+        {"1.3",           NV_ENC_LEVEL_H264_13},
+        {"2.0",           NV_ENC_LEVEL_H264_2},
+        {"2.1",           NV_ENC_LEVEL_H264_21},
+        {"2.2",           NV_ENC_LEVEL_H264_22},
+        {"3.0",           NV_ENC_LEVEL_H264_3},
+        {"3.1",           NV_ENC_LEVEL_H264_31},
+        {"3.2",           NV_ENC_LEVEL_H264_32},
+        {"4.0",           NV_ENC_LEVEL_H264_4},
+        {"4.1",           NV_ENC_LEVEL_H264_41},
+        {"4.2",           NV_ENC_LEVEL_H264_42},
+        {"5.0",           NV_ENC_LEVEL_H264_5},
+        {"5.1",           NV_ENC_LEVEL_H264_51},
+        {"6.0",           NV_ENC_LEVEL_H264_6},
+        {"6.1",           NV_ENC_LEVEL_H264_61},
+        {"6.2",           NV_ENC_LEVEL_H264_62},
     };
-    return strtab2htsmsg(tab, 1, lang);
+    return strtab2htsmsg(tab, 1);
 }
 
 static const codec_profile_class_t codec_profile_nvenc_h264_class = {
