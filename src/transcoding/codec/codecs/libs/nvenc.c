@@ -261,17 +261,6 @@ static const codec_profile_class_t codec_profile_nvenc_class = {
                 .list     = codec_profile_nvenc_class_rc_list,
                 .def.i    = NV_ENC_PARAMS_RC_AUTO,
             },
-            {
-                .type     = PT_INT,
-                .id       = "level",
-                .name     = N_("Level"),
-                .group    = 3,
-                .desc     = N_("Override the preset level."),
-                .opts     = PO_EXPERT,
-                .off      = offsetof(tvh_codec_profile_nvenc_t, level),
-                .list     = codec_profile_nvenc_class_level_list,
-                .def.i    = NV_ENC_LEVEL_AUTOSELECT,
-            },
             {}
         }
     },
@@ -405,6 +394,17 @@ static const codec_profile_class_t codec_profile_nvenc_h264_class = {
         .ic_class      = "codec_profile_nvenc_h264",
         .ic_caption    = N_("nvenc_h264"),
         .ic_properties = (const property_t[]){
+            {
+                .type     = PT_INT,
+                .id       = "level",
+                .name     = N_("Level"),
+                .group    = 3,
+                .desc     = N_("Override the preset level."),
+                .opts     = PO_EXPERT,
+                .off      = offsetof(tvh_codec_profile_nvenc_t, level),
+                .list     = codec_profile_nvenc_class_level_list,
+                .def.i    = NV_ENC_LEVEL_AUTOSELECT,
+            },
             {}
         }
     },
@@ -512,5 +512,4 @@ TVHVideoCodec tvh_codec_nvenc_hevc = {
     .profiles = nvenc_hevc_profiles,
     .profile_init = tvh_codec_profile_video_init,
     .profile_destroy = tvh_codec_profile_video_destroy,
-    .level    = nvenc_hevc_levels,
 };
