@@ -48,7 +48,8 @@
 #define NV_ENC_H264_PROFILE_HIGH			        2
 #define NV_ENC_H264_PROFILE_HIGH_444P           	3
 
-#define NV_ENC_LEVEL_AUTOSELECT                     0
+#define NV_ENC_LEVEL_AUTOSELECT
+
 #define NV_ENC_LEVEL_H264_1                         10
 #define NV_ENC_LEVEL_H264_1b                        9
 #define NV_ENC_LEVEL_H264_11                        11
@@ -278,30 +279,6 @@ static const AVProfile nvenc_h264_profiles[] = {
     { NV_ENC_H264_PROFILE_HIGH_444P,            "High 444P" },
     { FF_PROFILE_UNKNOWN },
 };
-/*
-static const AVProfile nvenc_h264_levels[] = {
-    { NV_ENC_LEVEL_H264_1,             "1.0" },
-    { NV_ENC_LEVEL_H264_1b,            "1.0b"},
-    { NV_ENC_LEVEL_H264_11,            "1.1" },
-    { NV_ENC_LEVEL_H264_12,            "1.2" },
-    { NV_ENC_LEVEL_H264_13,            "1.3" },
-    { NV_ENC_LEVEL_H264_2,             "2.0" },
-    { NV_ENC_LEVEL_H264_21,            "2.1" },
-    { NV_ENC_LEVEL_H264_22,            "2.2" },
-    { NV_ENC_LEVEL_H264_3,             "3.0" },
-    { NV_ENC_LEVEL_H264_31,            "3.1" },
-    { NV_ENC_LEVEL_H264_32,            "3.2" },
-    { NV_ENC_LEVEL_H264_4,             "4.0" },
-    { NV_ENC_LEVEL_H264_41,            "4.1" },
-    { NV_ENC_LEVEL_H264_42,            "4.2" },
-    { NV_ENC_LEVEL_H264_5,             "5.0" },
-    { NV_ENC_LEVEL_H264_51,            "5.1" },
-    { NV_ENC_LEVEL_H264_6,             "6.0" },
-    { NV_ENC_LEVEL_H264_61,            "6.1" },
-    { NV_ENC_LEVEL_H264_62,            "6.2" },
-    { NV_ENC_LEVEL_AUTOSELECT },
-};
-*/
 
 static int
 tvh_codec_profile_nvenc_h264_open(tvh_codec_profile_nvenc_t *self,
@@ -397,7 +374,7 @@ static const codec_profile_class_t codec_profile_nvenc_h264_class = {
                 .type     = PT_INT,
                 .id       = "level",
                 .name     = N_("Level"),
-                .group    = 3,
+                .group    = 4,
                 .desc     = N_("Override the preset level."),
                 .opts     = PO_EXPERT,
                 .off      = offsetof(tvh_codec_profile_nvenc_t, level),
@@ -427,24 +404,6 @@ static const AVProfile nvenc_hevc_profiles[] = {
     { NV_ENC_HEVC_PROFILE_REXT, "Rext" },
     { FF_PROFILE_UNKNOWN },
 };
-
-/*
-static const AVProfile nvenc_hevc_levels[] = {
-    { NV_ENC_LEVEL_HEVC_1,             "1.0" },
-    { NV_ENC_LEVEL_HEVC_2,             "2.0" },
-    { NV_ENC_LEVEL_HEVC_21,            "2.1" },
-    { NV_ENC_LEVEL_HEVC_3,             "3.0" },
-    { NV_ENC_LEVEL_HEVC_31,            "3.1" },
-    { NV_ENC_LEVEL_HEVC_4,             "4.0" },
-    { NV_ENC_LEVEL_HEVC_41,            "4.1" },
-    { NV_ENC_LEVEL_HEVC_5,             "5.0" },
-    { NV_ENC_LEVEL_HEVC_51,            "5.1" },
-    { NV_ENC_LEVEL_HEVC_6,             "6.0" },
-    { NV_ENC_LEVEL_HEVC_61,            "6.1" },
-    { NV_ENC_LEVEL_HEVC_62,            "6.2" },
-    { NV_ENC_LEVEL_AUTOSELECT },
-};
-*/
 
 static int
 tvh_codec_profile_nvenc_hevc_open(tvh_codec_profile_nvenc_t *self,
@@ -527,7 +486,7 @@ static const codec_profile_class_t codec_profile_nvenc_hevc_class = {
                 .type     = PT_INT,
                 .id       = "level",
                 .name     = N_("Level"),
-                .group    = 3,
+                .group    = 4,
                 .desc     = N_("Override the preset level."),
                 .opts     = PO_EXPERT,
                 .off      = offsetof(tvh_codec_profile_nvenc_t, level),
