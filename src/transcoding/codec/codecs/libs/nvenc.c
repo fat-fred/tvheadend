@@ -521,7 +521,7 @@ static const codec_profile_class_t codec_profile_nvenc_hevc_class = {
     {
         .ic_super      = (idclass_t *)&codec_profile_nvenc_class,
         .ic_class      = "codec_profile_nvenc_hevc",
-        .ic_caption    = N_("nvenc_hevc")
+        .ic_caption    = N_("nvenc_hevc"),
         .ic_properties = (const property_t[]){
             {
                 .type     = PT_INT,
@@ -539,7 +539,6 @@ static const codec_profile_class_t codec_profile_nvenc_hevc_class = {
     },
     .open = (codec_profile_open_meth)tvh_codec_profile_nvenc_hevc_open,
 };
-
 
 TVHVideoCodec tvh_codec_nvenc_hevc = {
     .name     = "hevc_nvenc",
