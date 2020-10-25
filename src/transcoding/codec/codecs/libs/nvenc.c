@@ -361,7 +361,7 @@ codec_profile_nvenc_class_level_list_h264(void *obj)
         {"6.1",           NV_ENC_LEVEL_H264_61},
         {"6.2",           NV_ENC_LEVEL_H264_62},
     };
-    return strtab2htsmsg(tab, 1);
+    return strtab2htsmsg(tab, 1, lang);
 }
 
 static const codec_profile_class_t codec_profile_nvenc_h264_class = {
