@@ -26,7 +26,7 @@
 #include "transcoding/memutils.h"
 
 
-#define AUTO_STR "auto"
+#define AUTO_STR "Auto"
 
 #define ADD_ENTRY(l, m, kt, k, vt, v) \
     do { \

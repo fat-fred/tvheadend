@@ -48,6 +48,10 @@
 #define NV_ENC_H264_PROFILE_HIGH			        2
 #define NV_ENC_H264_PROFILE_HIGH_444P           	3
 
+#define NV_ENC_HEVC_PROFILE_MAIN			        0
+#define NV_ENC_HEVC_PROFILE_MAIN_10 			    1
+#define NV_ENC_HEVC_PROFILE_REXT			        2
+
 #define NV_ENC_LEVEL_AUTOSELECT                     0
 
 #define NV_ENC_LEVEL_H264_1                         10
@@ -69,10 +73,6 @@
 #define NV_ENC_LEVEL_H264_6                         60
 #define NV_ENC_LEVEL_H264_61                        61
 #define NV_ENC_LEVEL_H264_62                        62
-
-#define NV_ENC_HEVC_PROFILE_MAIN			        0
-#define NV_ENC_HEVC_PROFILE_MAIN_10 			    1
-#define NV_ENC_HEVC_PROFILE_REXT			        2
 
 #define NV_ENC_LEVEL_HEVC_1                         30
 #define NV_ENC_LEVEL_HEVC_2                         60
@@ -437,11 +437,13 @@ tvh_codec_profile_nvenc_hevc_open(tvh_codec_profile_nvenc_t *self,
     if (self->level != NV_ENC_LEVEL_AUTOSELECT &&
         (s = val2str(self->level, leveltab)) != NULL) {
         AV_DICT_SET(opts, "level", s, 0);
-    }
+        }
 
     if (self->nvenc_profile != FF_PROFILE_UNKNOWN &&
-        (s = val2str(self->nvenc_profile, profiletab)) != NULL)
-    AV_DICT_SET(opts, "profile", s, 0);
+        (s = val2str(self->nvenc_profile, profiletab)) != NULL) {
+        AV_DICT_SET(opts, "profile", s, 0);
+        }
+    
     // ------ Set Defaults ---------
     AV_DICT_SET(opts, "qmin", "-1", 0);
     AV_DICT_SET(opts, "qmax", "-1", 0);
@@ -502,8 +504,8 @@ static const codec_profile_class_t codec_profile_nvenc_hevc_class = {
 TVHVideoCodec tvh_codec_nvenc_hevc = {
     .name     = "hevc_nvenc",
     .size     = sizeof(tvh_codec_profile_nvenc_t),
-    .idclass  = &codec_profile_nvenc_hevc_class,
     .profiles = nvenc_hevc_profiles,
+    .idclass  = &codec_profile_nvenc_hevc_class,
     .profile_init = tvh_codec_profile_video_init,
     .profile_destroy = tvh_codec_profile_video_destroy,
 };
