@@ -504,8 +504,8 @@ static const codec_profile_class_t codec_profile_nvenc_hevc_class = {
 TVHVideoCodec tvh_codec_nvenc_hevc = {
     .name     = "hevc_nvenc",
     .size     = sizeof(tvh_codec_profile_nvenc_t),
-    .profiles = nvenc_hevc_profiles,
     .idclass  = &codec_profile_nvenc_hevc_class,
+    .profiles = nvenc_hevc_profiles,
     .profile_init = tvh_codec_profile_video_init,
     .profile_destroy = tvh_codec_profile_video_destroy,
 };
