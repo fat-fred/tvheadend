@@ -168,8 +168,9 @@ const codec_profile_class_t codec_profile_video_class = {
             {
                 .type     = PT_BOOL,
                 .id       = "hwaccel",
-                .name     = N_("Hardware acceleration"),
-                .desc     = N_("Use hardware acceleration for decoding if available."),
+                .name     = N_("Hardware accelerated decoding"),
+                .desc     = N_("Use hardware acceleration for decoding if available."
+                               "(only supports VAAPI-Devices as Decoder at the moment) "),
                 .group    = 2,
                 .off      = offsetof(TVHVideoCodecProfile, hwaccel),
                 .def.i    = 0,
