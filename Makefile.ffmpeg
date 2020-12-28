@@ -562,6 +562,9 @@ ifeq (yes,$(CONFIG_NVENC))
 
 EXTLIBS  += nvenc
 ENCODERS += h264_nvenc hevc_nvenc
+DECODERS += h264_nvdec hevc_nvdec vc1_nvdec vp8_nvdec vp9_nvdec mjpeg_nvdec mpeg1_nvdec mpeg2_nvdec mpeg4_nvdec
+FILTERS  += hwupload_cuda overlay_cuda scale_cuda thumbnail_cuda yadif_cuda
+HWACCELS += cuda
 
 $(LIB_ROOT)/$(FFNVCODEC)/.tvh_download:
 	$(call DOWNLOAD,$(FFNVCODEC_URL),$(LIB_ROOT)/$(FFNVCODEC_TB),$(FFNVCODEC_SHA1))
