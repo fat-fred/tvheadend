@@ -42,6 +42,7 @@ MUXERS         = mpegts matroska mp4
 DEMUXERS       = mpegts matroska hls flv live_flv concat
 BSFS           = h264_mp4toannexb hevc_mp4toannexb
 FILTERS        = yadif format hwupload hwdownload scale null aresample anull
+PARSERS        = aac h264 hevc
 HWACCELS       =
 
 NASM_VER       = 2.15.05
@@ -693,7 +694,8 @@ $(LIB_ROOT)/$(FFMPEG)/.tvh_build: \
 		$(foreach decoder,$(DECODERS),--enable-decoder=$(decoder)) \
 		$(foreach encoder,$(ENCODERS),--enable-encoder=$(encoder)) \
 		$(foreach demuxer,$(DEMUXERS),--enable-demuxer=$(demuxer)) \
-		$(foreach muxer,$(MUXERS),--enable-muxer=$(muxer)) \
+                $(foreach parser,$(PARSERS),--enable-parser=$(parser)) \
+ 		$(foreach muxer,$(MUXERS),--enable-muxer=$(muxer)) \
 		$(foreach bsf,$(BSFS),--enable-bsf=$(bsf)) \
 		$(foreach filter,$(FILTERS),--enable-filter=$(filter)) \
 		$(foreach hwaccel,$(HWACCELS),--enable-hwaccel=$(hwaccel)) \
