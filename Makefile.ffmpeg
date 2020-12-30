@@ -33,7 +33,7 @@ unexport LDFLAGS
 # ##############################################################################
 
 EXTLIBS        =
-COMPONENTS     = avutil avcodec avformat swscale swresample avfilter
+COMPONENTS     = avutil avcodec avformat avresamble swscale swresample avfilter
 PROTOCOLS      = file http https hls mmsh mmst rtmp rtmpe rtmps rtmpt rtmpte rtmpts \
                  ffrtmpcrypt ffrtmphttp rtp srtp tcp udp udplite unix crypto pipe
 DECODERS       = mpeg2video mp2 aac vorbis ac3 eac3 aac_latm opus h264 hevc theora flac
@@ -561,7 +561,7 @@ endif
 
 ifeq (yes,$(CONFIG_NVENC))
 
-EXTLIBS  += nvenc
+EXTLIBS  += nvenc cuda cuvid
 ENCODERS += h264_nvenc hevc_nvenc
 HWACCELS += h264_nvdec hevc_nvdec vc1_nvdec vp8_nvdec vp9_nvdec mjpeg_nvdec mpeg1_nvdec mpeg2_nvdec mpeg4_nvdec
 FILTERS  += hwupload_cuda overlay_cuda scale_cuda thumbnail_cuda yadif_cuda
